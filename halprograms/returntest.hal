@@ -1,0 +1,18 @@
+function         :main
+variable         :x
+x                :integer
+call             :notmain
+set              :x
+return           :x
+
+function         :notmain
+variable         :a
+a                :integer
+a                :10
+variable         :i
+i                :integer
+put              :3
+set              :i
+put              :123
+set              :a<i>
+return           :a<i>

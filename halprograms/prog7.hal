@@ -1,0 +1,78 @@
+function .calculate2
+constant .a
+a        .string
+variable .b
+b        .integer
+call     .calculate3
+return   .0
+
+function .calculate3
+constant .a
+a        .string
+variable .b
+b        .integer
+call     .calculate4
+return   .
+
+function .calculate4
+constant .a
+a        .string
+variable .b
+b        .integer
+call     .calculate5
+return   .98
+
+function .calculate8
+constant .a
+a        .string
+variable .b
+b        .integer
+call     .calculate9
+return   .
+
+function .calculate5
+constant .a
+a        .string
+variable .b
+b        .integer
+call     .calculate6
+return   .1
+
+function .main
+constant .a
+a        .string
+variable .b
+b        .integer
+call     .calculate1
+return   .21
+
+function .calculate6
+constant .a
+a        .string
+variable .b
+b        .integer
+call     .calculate7
+return   .
+
+function .calculate7
+constant .a
+a        .string
+variable .b
+b        .integer
+call     .calculate8
+return   .67
+
+function .calculate9
+constant .a
+a        .string
+variable .b
+b        .integer
+return   .-18.6
+
+function .calculate1
+constant .a
+a        .string
+variable .b
+b        .integer
+call     .calculate2
+return   .6.75

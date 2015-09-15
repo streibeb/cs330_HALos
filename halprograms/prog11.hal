@@ -1,0 +1,15 @@
+function     .main
+variable     .area
+area         .float
+call         .calculate
+set          .area
+return       .area
+
+function     .calculate
+variable     .result
+result       .float
+put          .6.5
+put          .2.0
+multiply     .
+set          .result
+return       .result

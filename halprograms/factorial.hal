@@ -1,0 +1,50 @@
+comment      :Factorial Calculator
+comment      :This programs calculates n-factorial for small values of n.
+comment      :Author: Robert J. Hilderman
+comment      :Copyright 2015
+
+comment      :The factorial function calculates
+comment      :n(n-1) recursively until n is 0.
+
+function     :factorial
+variable     :n
+n            :integer
+variable     :result
+result       :integer
+put          :argument
+set          :n
+put          :n
+put          :0
+compare      :
+jumpgreater  :recurse
+put          :1
+jump         :end
+label        :recurse
+put          :n
+put          :n
+put          :1
+subtract     :
+set          :n
+put          :n
+call         :factorial
+set          :result
+unput        :
+put          :result
+multiply     :
+label        :end
+set          :result
+return       :result
+
+comment      :This function just gets the factorial
+comment      :function started. Argument is integer
+comment      :passed from main.
+
+function     :main
+variable     :n
+n            :integer
+put          :argument
+call         :factorial
+set          :n
+return       :n
+
+

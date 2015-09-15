@@ -1,0 +1,40 @@
+function           :main
+variable           :a
+a                  :integer
+variable           :b
+b                  :float
+variable           :c
+c                  :string
+variable           :d
+d                  :integer
+d                  :5
+variable           :e
+e                  :float
+e                  :10
+variable           :f
+f                  :string
+f                  :20
+variable           :g
+g                  :integer
+put                :3
+set                :g
+put                :test stuff 1
+set                :f
+put                :f
+put                :test stuff 2
+set                :@f
+put                :@f
+put                :test stuff 3
+set                :f<3>
+put                :f<3>
+put                :test stuff 4
+set                :@f<3>
+put                :@f<3>
+put                :test stuff 5
+set                :f<g>
+put                :f<g>
+put                :test stuff 6
+set                :@f<g>
+put                :@f<g>
+coresnapshot       :
+return             :

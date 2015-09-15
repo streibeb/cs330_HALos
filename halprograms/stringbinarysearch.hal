@@ -1,0 +1,101 @@
+comment        :Iterative Binary Search
+comment        :Author: Robert J. Hilderman
+comment        :Copyright 2015
+
+
+comment        :This program finds a string value in a
+comment        :sorted array using binary search.
+
+function       :main
+file           :display
+open           :display
+put            :Initialize array a
+write          :display
+newline        :display
+variable       :a
+a              :string
+a              :16
+put            :alpha
+set            :a<0>
+put            :bravo
+set            :a<1>
+put            :charlie
+set            :a<2>
+put            :echo
+set            :a<3>
+put            :foxtrot
+set            :a<4>
+put            :golf
+set            :a<5>
+put            :hotel
+set            :a<6>
+put            :india
+set            :a<7>
+put            :juliet
+set            :a<8>
+put            :kilo
+set            :a<9>
+put            :lima
+set            :a<10>
+put            :mike
+set            :a<11>
+put            :november
+set            :a<12>
+put            :oscar
+set            :a<13>
+put            :papa
+set            :a<14>
+put            :quebec
+set            :a<15>
+variable       :x
+x              :string
+put            :argument
+set            :x
+put            :x
+put            :'Searching for 
+write          :display
+write          :display
+newline        :display
+variable       :p
+p              :integer
+put            :0
+set            :p
+variable       :q
+q              :integer
+put            :0
+set            :q
+variable       :r
+r              :integer
+put            :15
+set            :r
+label          :search
+put            :q
+put            :r
+compare        :
+jumpgreater    :stop
+put            :q
+put            :r
+add            :
+put            :2
+divide         :
+set            :p
+put            :x
+put            :a<p>
+compare        :
+jumpless       :xless
+jumpgreater    :xgreater
+return         :p
+label          :xless
+put            :p
+put            :1
+subtract       :
+set            :r
+jump           :search
+label          :xgreater
+put            :p
+put            :1
+add            :
+set            :q
+jump           :search
+label          :stop
+return         :-1

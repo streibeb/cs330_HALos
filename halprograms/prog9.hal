@@ -1,0 +1,42 @@
+variable .velocity
+velocity .integer
+
+function .main
+put      .velocity
+put      .324
+put      .velocity
+call     .notmain1
+return   .velocity
+
+function .notmain1
+constant .gravity
+gravity  .float
+put      .98.54
+put      .gravity
+call     .notmain2
+return   .gravity
+
+function .notmain2
+constant .gravity
+gravity  .float
+put      .98.54
+put      .gravity
+call     .notmain3
+return   .856
+
+function .notmain3
+constant .gravity
+gravity  .float
+put      .98.54
+put      .gravity
+call     .notmain4
+return   .
+
+function .notmain4
+constant .gravity
+gravity  .float
+variable .error
+error    .string
+put      .98.54
+put      .gravity
+return   .error

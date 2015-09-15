@@ -1,0 +1,75 @@
+file               :display
+
+function           :main
+open               :display
+variable           :a
+a                  :integer
+a                  :10
+put                :18
+set                :a<3>
+put                :a
+call               :notmain1
+put                :a<1>
+write              :display
+newline            :display
+put                :a<3>
+write              :display
+newline            :display
+put                :a<9>
+write              :display
+newline            :display
+put                :a<0>
+write              :display
+newline            :display
+put                :a<7>
+write              :display
+newline            :display
+close              :display
+return             :a<3>
+
+function           :notmain1
+put                :argument
+reference          :b
+put                :13
+set                :b<1>
+put                :b
+call               :notmain2
+return             :
+
+function           :notmain2
+put                :argument
+reference          :c
+put                :-56
+set                :c<9>
+put                :c
+call               :notmain3
+return             :
+
+function           :notmain3
+put                :argument
+reference          :d
+put                :12345
+set                :d<0>
+put                :d
+call               :notmain4
+return             :
+
+function           :notmain4
+put                :argument
+reference          :e
+put                :-54321
+set                :e<7>
+put                :e
+call               :notmain5
+return             :
+
+function           :notmain5
+put                :argument
+reference          :f
+put                :f<3>
+put                :18
+add                :
+set                :f<3>
+coresnapshot       :
+return             :
+
