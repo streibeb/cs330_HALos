@@ -8,6 +8,7 @@
 #define HAL_SHELL_H
 
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <stdlib.h>
 #include <signal.h>
@@ -20,14 +21,57 @@ using namespace std;
     #include "HALglobals.h"
 #endif
 
+struct Config
+{
+    string shellName;
+    string terminator;
+    int historySize;
+
+    Config()
+    {
+        shellName = "HALshell";
+	terminator = ">";
+    }
+
+    void Load()
+    {
+        ifstream fin;
+        fin.open("config");
+        if (fin)
+        {
+            fin >> shellName;
+            fin >> terminator;
+            fin >> historySize;
+            fin.close();
+        }
+    }
+
+    void Save()
+    {
+        ofstream fout;
+        fout.open("config");
+        if (fout)
+        {
+            fout << shellName << endl;
+            fout << terminator << endl;
+            fout << historySize << endl;
+            fout.close();
+        }
+    }
+};
+
 pid_t HALosPid;
 string returnPid = "";
 string returnValue = "";
 string returnMessage = "";
+Config config;
+string* commandHistory;
+int commandHistoryStart = 0;
+int commandHistoryEnd = 0;
 
 void Initialize ();
 void HALshell ();
-string GetCommandLine ();
+string GetCommandLine (int commandCount);
 void ProcessCommand (string command);
 bool SendCommandLine (string commandLine);
 void Wait ();

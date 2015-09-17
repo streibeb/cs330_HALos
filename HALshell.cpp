@@ -17,25 +17,27 @@ int main ()
 
 void HALshell ()
 {
+    int commandCount = 0;
     string commandLine;
 
     do
     {
-        commandLine = GetCommandLine ();
+        commandLine = GetCommandLine (++commandCount);
         ProcessCommand (commandLine);
     } while (1);
 
     return;
 }
 
-string GetCommandLine ()
+string GetCommandLine (int commandCount)
 {
     string commandLine;
 
     do
     {
         BlockSignals ();
-        cout << "HALshell> ";
+        cout << config.shellName << "[" << commandCount << "]" 
+<< config.terminator << " ";
         getline (cin, commandLine);
         if (cullProcess)
         {
@@ -52,6 +54,9 @@ string GetCommandLine ()
 void ProcessCommand (string commandLine)
 {
     bool commandSent;
+
+    commandHistory[commandHistoryEnd++] = commandline;
+    commandHistoryEnd = commandHistoryEnd % config.historySize; 
 
     if (commandLine == "result")
     {
@@ -70,10 +75,42 @@ void ProcessCommand (string commandLine)
              commandLine == "restart")
     {
         cout << endl;
-        cout << "HALshell: terminating ..." << endl;
+        cout << config.shellName << ": terminating ..." << endl;
         usleep (SLEEP_DELAY);
         SendCommandLine (commandLine);
         exit (0);
+    }
+    else if (commandLine.substr(0, 12) == "setshellname")
+    {
+        config.shellName = commandLine.substr(13);
+        config.Save();
+        return;
+    } 
+    else if (commandLine.substr(0, 13) == "setterminator")
+    {
+        config.terminator = commandLine.substr(14);
+        config.Save();
+        return;
+    }
+    else if (commandLine.substr(0, 14) == "sethistorysize")
+    {
+        config.historySize = atoi(commandLine.substr(15).c_str());
+        config.Save();
+        return;
+    }
+    else if (commandLine.substr(0,15) == "showhistorysize")
+    {
+        cout << config.historySize << endl;
+        return;
+    }
+    else if (commandLine.substr(0, 11) == "showhistory")
+    {
+        foreach (int i = 0; i < config.historySize; i++)
+        {
+            if (commandHistory[i].length() > 0)
+                cout << commandHistory[i] << endl
+        }
+        return;
     }
 
     commandSent = SendCommandLine (commandLine);
@@ -83,7 +120,7 @@ void ProcessCommand (string commandLine)
         GetMessageFromHALos ();
         if (returnMessage.length () > 0 && returnMessage != "ok")
         {
-            cout << "HALshell: " << returnMessage << endl;
+            cout << config.shellName << ": " << returnMessage << endl;
         }
     }
 
@@ -100,7 +137,8 @@ bool SendCommandLine (string commandLine)
     commandLineFile.open ("HALshellToHALos");
     if (!commandLineFile)
     {
-        cout << "HALshell: unable to initialize command line buffer" << endl;
+        cout << config.shellName << ": unable to initialize command line buffer" 
+<< endl;
         exit (1);
     }
     else
@@ -121,12 +159,14 @@ bool SendCommandLine (string commandLine)
         commandLineFile.close ();
         if (noOfArguments > MAX_COMMAND_LINE_ARGUMENTS)
         {
-            cout << "HALshell: maximum number of command line arguments is " << MAX_COMMAND_LINE_ARGUMENTS << endl;
+            cout << config.shellName << ": maximum number of command line arguments is " 
+<< MAX_COMMAND_LINE_ARGUMENTS << endl;
             return false;
         }
         if (sigqueue (HALosPid, SIGRTMIN, dummyValue) == -1)
         {
-            cout << "HALshell: command line signal not sent to HALos" << endl;
+            cout << config.shellName << ": command line signal not sent to HALos" 
+<< endl;
             exit (1);
         }
     }
@@ -164,7 +204,8 @@ void GetMessageFromHALos ()
     halOsMessageFile.open ("HALosToHALshell");
     if (!halOsMessageFile)
     {
-        cout << "HALshell: connection to HALos failed" << endl;
+        cout << config.shellName << ": connection to HALos failed" << 
+endl;
         exit (1);
     }
 
@@ -174,7 +215,8 @@ void GetMessageFromHALos ()
 
     if (!halOsMessageFile)
     {
-        cout << "HALshell: message not received from HALos" << endl;
+        cout << config.shellName << ": message not received from HALos" << 
+endl;
         return;
     }
 
@@ -185,14 +227,18 @@ void GetMessageFromHALos ()
 
 void Initialize ()
 {
-    cout << "HALos: HALshell OK" << endl;
+    config.Load();
+    commandHistory = new string[config.historySize];
+
+    cout << "HALos: " << config.shellName << " OK" << endl;
     usleep (SLEEP_DELAY);
 
-    cout << "HALshell: initializing ..." << endl;
+    cout << config.shellName << ": initializing ..." << endl;
     if ((sigemptyset (&interruptMask) == -1) ||
         (sigaddset (&interruptMask, SIGRTMIN) == -1))
     {
-        cout << "HALshell: unable to initialize signal mask" << endl;
+        cout << config.shellName << ": unable to initialize signal mask" 
+<< endl;
         exit (1);
     }
     act.sa_sigaction = &SignalHandler;
@@ -202,7 +248,8 @@ void Initialize ()
         (sigaction (SIGRTMIN, &act, NULL) == -1) ||
         (sigaction (SIGINT, &act, NULL) == -1))
     {
-        cout << "HALshell: unable to connect to HALos" << endl;
+        cout << config.shellName << ": unable to connect to HALos" << 
+endl;
         exit (1);
     }
     usleep (SLEEP_DELAY);
