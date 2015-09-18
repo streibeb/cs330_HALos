@@ -30,7 +30,8 @@ struct Config
     Config()
     {
         shellName = "HALshell";
-	terminator = ">";
+		terminator = ">";
+		historySize = 10;
     }
 
     void Load()
@@ -60,14 +61,150 @@ struct Config
     }
 };
 
+class HistQueue
+{
+private:
+    string* queue;
+    int front;
+    int back;
+    int length;
+    int QUEUE_SIZE;
+public:
+	HistQueue ()
+	{
+		
+	}
+
+	HistQueue (int queueSize)
+	{
+		QUEUE_SIZE = queueSize;
+		queue = new string [QUEUE_SIZE];
+
+		length = 0;
+		front = 0;
+		back = front;
+	}
+
+	~HistQueue ()
+	{
+	}
+
+	int Length ()
+	{
+		return length;
+	}
+
+	bool IsEmpty ()
+	{
+		if (length == 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	bool IsFull ()
+	{
+		if (length == QUEUE_SIZE)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	void Enqueue (string recentCmd)
+	{
+		if(length == 0)
+		{
+			queue[front] = recentCmd;
+			back = (back + 1) % QUEUE_SIZE;
+			length++;
+		}
+		else if(length > 0 && back == front)
+		{
+			front = (front + 1) % QUEUE_SIZE;
+			queue [back] = recentCmd;
+			back = (back + 1) % QUEUE_SIZE;
+		}
+		else
+		{
+			queue [back] = recentCmd;
+			back = (back + 1) % QUEUE_SIZE;
+			length++;
+		}
+		
+		return;
+	}
+
+	string Dequeue ()
+	{
+		front = (front + 1) % QUEUE_SIZE;
+
+		length --;
+
+		return (queue [front]);
+	}
+
+	void PrintHistory()
+	{
+		if(length != 0)
+		{
+			int current = front;
+			if(length != QUEUE_SIZE)
+			{
+				while(current != back)
+				{
+					if(queue[current] != "")
+					{
+						cout << queue[current] << '\n';
+					}
+					else
+					{
+						current = back;
+					}
+					
+					if(current % (QUEUE_SIZE-1) == 0 && current != 0)
+					{
+						current = 0;
+					}
+					else
+					{
+						current ++;
+					}
+				}
+			}
+			else
+			{
+				do
+				{
+					cout << queue[current] << '\n';
+					if(current % (QUEUE_SIZE-1) == 0  && current != 0)
+					{
+						current = 0;
+					}
+					else
+					{
+						current ++;
+					}
+				}while(current != front);
+			}
+		}
+		else
+		{
+			cout << "There was no history to display. Your history now contains 'showhistory'.";
+		}
+	return;
+	}
+};
+
 pid_t HALosPid;
 string returnPid = "";
 string returnValue = "";
 string returnMessage = "";
 Config config;
-string* commandHistory;
-int commandHistoryStart = 0;
-int commandHistoryEnd = 0;
+HistQueue queue;
 
 void Initialize ();
 void HALshell ();
