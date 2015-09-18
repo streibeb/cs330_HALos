@@ -55,8 +55,7 @@ void ProcessCommand (string commandLine)
 {
     bool commandSent;
 
-    commandHistory[commandHistoryEnd++] = commandline;
-    commandHistoryEnd = commandHistoryEnd % config.historySize; 
+    queue.Enqueue(commandLine); 
 
     if (commandLine == "result")
     {
@@ -105,14 +104,11 @@ void ProcessCommand (string commandLine)
     }
     else if (commandLine.substr(0, 11) == "showhistory")
     {
-        foreach (int i = 0; i < config.historySize; i++)
-        {
-            if (commandHistory[i].length() > 0)
-                cout << commandHistory[i] << endl
-        }
+      	queue.PrintHistory();
         return;
     }
 
+    
     commandSent = SendCommandLine (commandLine);
     if (commandSent)
     {
@@ -228,7 +224,7 @@ endl;
 void Initialize ()
 {
     config.Load();
-    commandHistory = new string[config.historySize];
+    queue = HistQueue(config.historySize);
 
     cout << "HALos: " << config.shellName << " OK" << endl;
     usleep (SLEEP_DELAY);
