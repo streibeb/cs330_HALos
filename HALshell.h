@@ -197,6 +197,38 @@ public:
 		}
 	return;
 	}
+	
+	string retrieveCmd()
+	{
+	    if(back == 0)
+	    {
+		return queue[(back+(QUEUE_SIZE-1))];
+	    }
+	    else
+	    {
+		return queue[(back-1)];
+	    }
+	}
+
+	string retrieveCmd(int recCmd)
+	{
+	    if(recCmd > 0 && recCmd < QUEUE_SIZE)
+	    {
+		if(back == 0 || recCmd > back)
+        	{
+			return queue[(back+(QUEUE_SIZE-recCmd))];
+        	}
+       	else
+        	{
+            	    return queue[(back-recCmd)];
+	       }
+	    }
+	    else
+	    {
+		string error = "Invalid history request!";
+		return error;
+	    }
+	}
 };
 
 pid_t HALosPid;

@@ -54,8 +54,29 @@ string GetCommandLine (int commandCount)
 void ProcessCommand (string commandLine)
 {
     bool commandSent;
-
-    queue.Enqueue(commandLine); 
+    if(commandLine.substr(0,1) != "!")
+    {
+        queue.Enqueue(commandLine);
+    }
+    else if(commandLine.length() == 1)
+    {
+	ProcessCommand(queue.retrieveCmd());
+	return;
+    }
+    else
+    {
+	string check = queue.retrieveCmd(atoi(commandLine.substr(2).c_str()));
+	if(check != "Invalid history request!")
+	{
+	    ProcessCommand(queue.retrieveCmd(atoi(commandLine.substr(2).c_str())));
+	    return;
+	}
+	else
+	{
+	    cout << check << endl;
+	    return;
+	}
+    }
 
     if (commandLine == "result")
     {
