@@ -114,9 +114,17 @@ void ProcessCommand (string commandLine)
     }
     else if (commandLine.substr(0, 14) == "sethistorysize")
     {
-        config.historySize = atoi(commandLine.substr(15).c_str());
-        config.Save();
-        return;
+	    if(atoi(commandLine.substr(15).c_str() > 0)
+	    {
+		    config.historySize = atoi(commandLine.substr(15).c_str());
+	    	queue.changeSize(atoi(commandLine.substr(15).c_str());
+	    	config.Save();
+	    }
+	    else
+	    {
+	    	cout << "History size must be greater than 0. No changes made." << endl;
+	    }
+	    return;
     }
     else if (commandLine.substr(0,15) == "showhistorysize")
     {
@@ -126,6 +134,19 @@ void ProcessCommand (string commandLine)
     else if (commandLine.substr(0, 11) == "showhistory")
     {
       	queue.PrintHistory();
+        return;
+    }
+	else if (commandLine.substr(0, 11) == "setnewnamesize")
+    {
+		if(atoi(commandLine.substr(12).c_str() > 0)
+		{
+			config.newNameSize = atoi(commandLine.substr(12).c_str();
+			config.Save();
+		}
+		else
+	    {
+	    	cout << "New Name list size must be greater than 0. No changes made." << endl;
+	    }
         return;
     }
 

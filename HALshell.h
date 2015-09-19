@@ -14,6 +14,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <termios.h>
+#include "dataStructures.h"
 
 using namespace std;
 
@@ -26,12 +27,14 @@ struct Config
     string shellName;
     string terminator;
     int historySize;
+	int newNameSize;
 
     Config()
     {
         shellName = "HALshell";
 		terminator = ">";
 		historySize = 10;
+		newNameSize = 10;
     }
 
     void Load()
@@ -43,6 +46,7 @@ struct Config
             fin >> shellName;
             fin >> terminator;
             fin >> historySize;
+	     fin >> newNameSize;
             fin.close();
         }
     }
@@ -56,179 +60,10 @@ struct Config
             fout << shellName << endl;
             fout << terminator << endl;
             fout << historySize << endl;
+	     fout << newNameSize << endl;
             fout.close();
         }
     }
-};
-
-class HistQueue
-{
-private:
-    string* queue;
-    int front;
-    int back;
-    int length;
-    int QUEUE_SIZE;
-public:
-	HistQueue ()
-	{
-		
-	}
-
-	HistQueue (int queueSize)
-	{
-		QUEUE_SIZE = queueSize;
-		queue = new string [QUEUE_SIZE];
-
-		length = 0;
-		front = 0;
-		back = front;
-	}
-
-	~HistQueue ()
-	{
-	}
-
-	int Length ()
-	{
-		return length;
-	}
-
-	bool IsEmpty ()
-	{
-		if (length == 0)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	bool IsFull ()
-	{
-		if (length == QUEUE_SIZE)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	void Enqueue (string recentCmd)
-	{
-		if(length == 0)
-		{
-			queue[front] = recentCmd;
-			back = (back + 1) % QUEUE_SIZE;
-			length++;
-		}
-		else if(length > 0 && back == front)
-		{
-			front = (front + 1) % QUEUE_SIZE;
-			queue [back] = recentCmd;
-			back = (back + 1) % QUEUE_SIZE;
-		}
-		else
-		{
-			queue [back] = recentCmd;
-			back = (back + 1) % QUEUE_SIZE;
-			length++;
-		}
-		
-		return;
-	}
-
-	string Dequeue ()
-	{
-		front = (front + 1) % QUEUE_SIZE;
-
-		length --;
-
-		return (queue [front]);
-	}
-
-	void PrintHistory()
-	{
-		if(length != 0)
-		{
-			int current = front;
-			if(length != QUEUE_SIZE)
-			{
-				while(current != back)
-				{
-					if(queue[current] != "")
-					{
-						cout << queue[current] << '\n';
-					}
-					else
-					{
-						current = back;
-					}
-					
-					if(current % (QUEUE_SIZE-1) == 0 && current != 0)
-					{
-						current = 0;
-					}
-					else
-					{
-						current ++;
-					}
-				}
-			}
-			else
-			{
-				do
-				{
-					cout << queue[current] << '\n';
-					if(current % (QUEUE_SIZE-1) == 0  && current != 0)
-					{
-						current = 0;
-					}
-					else
-					{
-						current ++;
-					}
-				}while(current != front);
-			}
-		}
-		else
-		{
-			cout << "There was no history to display. Your history now contains 'showhistory'.";
-		}
-	return;
-	}
-	
-	string retrieveCmd()
-	{
-	    if(back == 0)
-	    {
-		return queue[(back+(QUEUE_SIZE-1))];
-	    }
-	    else
-	    {
-		return queue[(back-1)];
-	    }
-	}
-
-	string retrieveCmd(int recCmd)
-	{
-	    if(recCmd > 0 && recCmd < QUEUE_SIZE)
-	    {
-		if(back == 0 || recCmd > back)
-        	{
-			return queue[(back+(QUEUE_SIZE-recCmd))];
-        	}
-       	else
-        	{
-            	    return queue[(back-recCmd)];
-	       }
-	    }
-	    else
-	    {
-		string error = "Invalid history request!";
-		return error;
-	    }
-	}
 };
 
 pid_t HALosPid;
