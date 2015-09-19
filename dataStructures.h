@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+
+using namespace std;
 //
 // A class for storing the history of commands entered on the command line, integrated into HALshell.
 //
@@ -21,9 +23,9 @@ public:
 
 	~HistQueue ();
 
-	int Length ()
+	int Length ();
 
-	bool IsEmpty ()
+	bool IsEmpty ();
 
 	bool IsFull ();
 

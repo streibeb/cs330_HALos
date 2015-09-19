@@ -114,10 +114,10 @@ void ProcessCommand (string commandLine)
     }
     else if (commandLine.substr(0, 14) == "sethistorysize")
     {
-	    if(atoi(commandLine.substr(15).c_str() > 0)
+	    if(atoi(commandLine.substr(15).c_str()) > 0)
 	    {
 		    config.historySize = atoi(commandLine.substr(15).c_str());
-	    	queue.changeSize(atoi(commandLine.substr(15).c_str());
+	    	queue.changeSize(atoi(commandLine.substr(15).c_str()));
 	    	config.Save();
 	    }
 	    else
@@ -136,11 +136,11 @@ void ProcessCommand (string commandLine)
       	queue.PrintHistory();
         return;
     }
-	else if (commandLine.substr(0, 11) == "setnewnamesize")
+	else if (commandLine.substr(0, 14) == "setnewnamesize")
     {
-		if(atoi(commandLine.substr(12).c_str() > 0)
+		if(atoi(commandLine.substr(15).c_str()) > 0)
 		{
-			config.newNameSize = atoi(commandLine.substr(12).c_str();
+			config.newNameSize = atoi(commandLine.substr(15).c_str());
 			config.Save();
 		}
 		else
