@@ -305,7 +305,7 @@ void Initialize ()
 {
     config.Load();
     queue = HistQueue(config.historySize);
-    aliasList = Array<string>(config.newNameSize);
+    aliasList = Array(config.newNameSize);
 
     cout << "HALos: " << config.shellName << " OK" << endl;
     usleep (SLEEP_DELAY);

@@ -72,7 +72,7 @@ string returnValue = "";
 string returnMessage = "";
 Config config;
 HistQueue queue;
-Array<string> aliasList;
+Array aliasList;
 
 void Initialize ();
 void HALshell ();

@@ -43,26 +43,26 @@ public:
 	void changeSize(int newSize);
 };
 
-template <class T>
+
 class Array
 {
 private:
-    T* data;
-    unsigned int size;
-    unsigned int MAX_SIZE;
+    string* data;
+    int size;
+    int MAX_SIZE;
 
 public:
     Array();
-    Array(unsigned int newSize);
+    Array(int newSize);
     ~Array();
-    void SetSize(unsigned int i);
+    void SetSize(int i);
     
-    T& operator [] (unsigned int index);
+    string& operator [] (int index);
     bool IsFull();
-    unsigned int Length();
-    void Add(const T &item);
+    int Length();
+    void Add(string item);
     void Clear();
-    void Delete(unsigned int index);
+    void Delete(int index);
 };
 
 #endif
