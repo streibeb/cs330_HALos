@@ -48,21 +48,21 @@ class Array
 {
 private:
     string* data;
-    int size;
-    int MAX_SIZE;
+    unsigned int size;
+    unsigned int MAX_SIZE;
 
 public:
     Array();
-    Array(int newSize);
+    Array(unsigned int newSize);
     ~Array();
-    void SetSize(int i);
+    void SetSize(unsigned int i);
     
-    string& operator [] (int index);
+    string& operator [] (unsigned int index);
     bool IsFull();
-    int Length();
+    unsigned int Length();
     void Add(string item);
     void Clear();
-    void Delete(int index);
+    void Delete(unsigned int index);
 };
 
 #endif
