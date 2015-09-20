@@ -29,8 +29,8 @@ HALdisplayDriver: HALdisplayDriver.o
 HALdiskDriver:	HALdiskDriver.o
 		$(COMPILER) HALdiskDriver.o -o HALdiskDriver
 
-HALshell:	HALshell.o
-		$(COMPILER) HALshell.o -o HALshell
+HALshell:	HALshell.o dataStructures.o
+		$(COMPILER) dataStructures.o HALshell.o -o HALshell
 
 HAL9000.o:	HAL9000.cpp HAL9000.h
 		$(COMPILER) $(OPTS) $(DEFS) $(INCS) HAL9000.cpp $(LIBS)
@@ -58,6 +58,9 @@ HALqueue.o:	HALqueue.cpp HALqueue.h
 
 HALfileTable.o:	HALfileTable.cpp HALfileTable.h
 		$(COMPILER) $(OPTS) $(DEFS) $(INCS) HALfileTable.cpp $(LIBS)
+
+dataStructures.o:	dataStructures.cpp dataStructures.cpp
+		$(COMPILER) $(OPTS) $(DEFS) $(INCS) dataStructures.cpp $(LIBS)
 
 clean:
 		rm -f HAL9000
