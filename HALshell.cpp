@@ -114,17 +114,18 @@ void ProcessCommand (string commandLine)
     }
     else if (commandLine.substr(0, 14) == "sethistorysize")
     {
-	    if(atoi(commandLine.substr(15).c_str()) > 0)
-	    {
-		    config.historySize = atoi(commandLine.substr(15).c_str());
-	    	queue.changeSize(atoi(commandLine.substr(15).c_str()));
-	    	config.Save();
-	    }
-	    else
-	    {
-	    	cout << "History size must be greater than 0. No changes made." << endl;
-	    }
-	    return;
+        if(atoi(commandLine.substr(15).c_str()) > 0)
+	{
+            config.historySize = atoi(commandLine.substr(15).c_str());
+            queue.changeSize(atoi(commandLine.substr(15).c_str()));
+	    config.Save();
+	}
+	else
+	{
+	    cout << "History size must be greater than 0. "
+<< "No changes made." << endl;
+	}
+	return;
     }
     else if (commandLine.substr(0,15) == "showhistorysize")
     {
@@ -136,20 +137,57 @@ void ProcessCommand (string commandLine)
       	queue.PrintHistory();
         return;
     }
-	else if (commandLine.substr(0, 14) == "setnewnamesize")
+    else if (commandLine.substr(0, 14) == "setnewnamesize")
     {
-		if(atoi(commandLine.substr(15).c_str()) > 0)
-		{
-			config.newNameSize = atoi(commandLine.substr(15).c_str());
-			config.Save();
-		}
-		else
-	    {
-	    	cout << "New Name list size must be greater than 0. No changes made." << endl;
-	    }
+        if(atoi(commandLine.substr(15).c_str()) > 0)
+	{
+            config.newNameSize = atoi(commandLine.substr(15).c_str());
+	    config.Save();
+	}
+	else
+	{
+            cout << "New Name list size must be greater than 0. No changes made." << endl;
+        }
         return;
     }
-
+    else if (commandLine.substr(0, 15) == "shownewnamesize")
+    {
+        cout << config.newNameSize << endl; 
+        return;
+    }
+    else if (commandLine.substr(0, 10) == "setnewname")
+    {
+        int noOfArguments = 1;
+        string cmdArguments[10];
+        for (int i = 0; i < commandLine.length (); i++)
+        {
+            if (commandLine[i] == ' ')
+            {
+                noOfArguments ++;
+            }
+            else cmdArguments[noOfArguments] += commandLine[i];
+        }
+        
+        if (noOfArguments == 1)
+        {
+            aliasList.Clear();
+        }
+        else if (noOfArguments == 2)
+        {
+            for (int i = 0; i < aliasList.Length(); i++)
+            {
+                string alias = cmdArguments[1];
+                if (aliasList[i].substr(0, alias.length()) == alias)
+                {
+                    aliasList.Delete(i);
+                }
+            }
+        }
+        else 
+        {
+            
+        }
+    }
     
     commandSent = SendCommandLine (commandLine);
     if (commandSent)
@@ -267,6 +305,7 @@ void Initialize ()
 {
     config.Load();
     queue = HistQueue(config.historySize);
+    aliasList = Array<string>(config.newNameSize);
 
     cout << "HALos: " << config.shellName << " OK" << endl;
     usleep (SLEEP_DELAY);
