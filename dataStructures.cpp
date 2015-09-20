@@ -180,7 +180,7 @@ void HistQueue::changeSize(int newSize)
 	{
 		char ans;
 		cout << "Are you sure you would like to reduce history size? Some history may be lost. (You must enter 'y' or 'n')" << endl << "Reduce size? ";
-		while(ans != 'y' || ans != 'n')
+		while(ans != 'y' && ans != 'n')
 		{
 			cin >> ans;
 			ans = tolower(ans);
