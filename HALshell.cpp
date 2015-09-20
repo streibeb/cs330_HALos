@@ -157,7 +157,7 @@ void ProcessCommand (string commandLine)
     }
     else if (commandLine.substr(0, 10) == "setnewname")
     {
-        int noOfArguments = 1;
+        int noOfArguments = 0;
         string cmdArguments[10];
         for (int i = 0; i < commandLine.length (); i++)
         {
@@ -172,21 +172,37 @@ void ProcessCommand (string commandLine)
         {
             aliasList.Clear();
         }
-        else if (noOfArguments == 2)
+        else if (aliasList.Length() > 0)
         {
             for (int i = 0; i < aliasList.Length(); i++)
             {
                 string alias = cmdArguments[1];
                 if (aliasList[i].substr(0, alias.length()) == alias)
                 {
-                    aliasList.Delete(i);
+                    if (noOfArguments == 2)
+                        aliasList.Delete(i);
+                    else
+                    {
+                        aliasList.Delete(i);
+                        aliasList.Add(commandLine.substr(11));
+                        break;
+                    }
                 }
             }
         }
-        else 
+        else
         {
-            
+            aliasList.Add(commandLine.substr(11));
         }
+        return;
+    }
+    else if (commandLine.substr(0, 12) == "shownewnames")
+    {
+        for (int i = 0; i < aliasList.Length(); i++)
+        {
+            cout << aliasList[i] << endl;
+        }
+        return;
     }
     
     commandSent = SendCommandLine (commandLine);

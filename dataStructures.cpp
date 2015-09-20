@@ -202,7 +202,7 @@ void HistQueue::changeSize(int newSize)
 			{
 				queue[i] = oldArray[i];
 			}
-			delete oldArray;
+			delete [] oldArray;
 			oldArray = NULL;
 		}
 	}
@@ -215,20 +215,18 @@ Array::Array()
 
 }
 
-
 Array::Array(unsigned int newSize)
 {
+    size = 0;
     MAX_SIZE = newSize;
     data = new string[MAX_SIZE];
 }
-
 
 Array::~Array()
 {
     delete [] data;
     data = NULL;
 }
-
 
 void Array::SetSize(unsigned int i)
 {
@@ -241,26 +239,23 @@ void Array::SetSize(unsigned int i)
     delete [] data;
     data = tempData;
     delete [] tempData;
+    return;
 }
-
 
 string& Array::operator [](unsigned int index)
 {
     return data[index];
 }
 
-
 bool Array::IsFull()
 {
     return (size == MAX_SIZE);
 }
 
-
 unsigned int Array::Length()
 {
     return size;
 }
-
 
 void Array::Add(string item)
 {
@@ -269,14 +264,14 @@ void Array::Add(string item)
         data[size] = item;
         size++;
     }
+    return;
 }
-
 
 void Array::Clear()
 {
     size = 0;
+    return;
 }
-
 
 void Array::Delete(unsigned int index)
 {
@@ -287,4 +282,5 @@ void Array::Delete(unsigned int index)
             data[i] = data[i+1];
         }
     }
+    return;
 }
