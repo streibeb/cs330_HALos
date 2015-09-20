@@ -209,30 +209,30 @@ void HistQueue::changeSize(int newSize)
 	return;
 }
 
-template <class T>
-Array<T>::Array()
+
+Array::Array()
 {
 
 }
 
-template <class T>
-Array<T>::Array(unsigned int newSize)
+
+Array::Array(unsigned int newSize)
 {
     MAX_SIZE = newSize;
-    data = new T[MAX_SIZE];
+    data = new string[MAX_SIZE];
 }
 
-template <class T>
-Array<T>::~Array()
+
+Array::~Array()
 {
     delete [] data;
     data = NULL;
 }
 
-template <class T>
-void Array<T>::SetSize(unsigned int i)
+
+void Array::SetSize(unsigned int i)
 {
-    T* tempData = new T[i];
+    string* tempData = new string[i];
     unsigned int newMaxSize = (i < MAX_SIZE) ? i : MAX_SIZE;
     for (int i = 0; i < newMaxSize; i++)
     {
@@ -243,26 +243,26 @@ void Array<T>::SetSize(unsigned int i)
     delete [] tempData;
 }
 
-template <class T>
-T& Array<T>::operator [](unsigned int index)
+
+string& Array::operator [](unsigned int index)
 {
     return data[index];
 }
 
-template <class T>
-bool Array<T>::IsFull()
+
+bool Array::IsFull()
 {
     return (size == MAX_SIZE);
 }
 
-template <class T>
-unsigned int Array<T>::Length()
+
+unsigned int Array::Length()
 {
     return size;
 }
 
-template <class T>
-void Array<T>::Add(const T& item)
+
+void Array::Add(string item)
 {
     if (!IsFull())
     {
@@ -271,17 +271,14 @@ void Array<T>::Add(const T& item)
     }
 }
 
-template <class T>
-void Array<T>::Clear()
+
+void Array::Clear()
 {
-    for (int i = 0; i < MAX_SIZE; i++)
-    {
-        data[i] = NULL;
-    }
+    size = 0;
 }
 
-template <class T>
-void Array<T>::Delete(unsigned int index)
+
+void Array::Delete(unsigned int index)
 {
     if (index >= 0 && index < size)
     {
