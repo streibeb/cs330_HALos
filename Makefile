@@ -29,7 +29,7 @@ HALdisplayDriver: HALdisplayDriver.o
 HALdiskDriver:	HALdiskDriver.o
 		$(COMPILER) HALdiskDriver.o -o HALdiskDriver
 
-HALshell:	HALshell.o dataStructures.o
+HALshell:	dataStructures.o HALshell.o
 		$(COMPILER) HALshell.o dataStructures.o -o HALshell
 
 HAL9000.o:	HAL9000.cpp HAL9000.h
