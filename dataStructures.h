@@ -1,6 +1,7 @@
 #ifndef __DATA_STRUCTURES_H__
 #define __DATA_STRUCTURES_H__
 
+#include <cstddef>
 #include <iostream>
 #include <string>
 
@@ -40,6 +41,28 @@ public:
 	string retrieveCmd(int recCmd);
 	
 	void changeSize(int newSize);
+};
+
+template <class T>
+class Array
+{
+private:
+    T* data;
+    unsigned int size;
+    unsigned int MAX_SIZE;
+
+public:
+    Array();
+    Array(unsigned int newSize);
+    ~Array();
+    void SetSize(unsigned int i);
+    
+    T& operator [] (unsigned int index);
+    bool IsFull();
+    unsigned int Length();
+    void Add(const T &item);
+    void Clear();
+    void Delete(unsigned int index);
 };
 
 #endif

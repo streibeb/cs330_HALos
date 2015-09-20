@@ -27,14 +27,14 @@ struct Config
     string shellName;
     string terminator;
     int historySize;
-	int newNameSize;
+    unsigned int newNameSize;
 
     Config()
     {
         shellName = "HALshell";
-		terminator = ">";
-		historySize = 10;
-		newNameSize = 10;
+	terminator = ">";
+	historySize = 10;
+	newNameSize = 10;
     }
 
     void Load()
@@ -46,7 +46,7 @@ struct Config
             fin >> shellName;
             fin >> terminator;
             fin >> historySize;
-	     fin >> newNameSize;
+	    fin >> newNameSize;
             fin.close();
         }
     }
@@ -60,7 +60,7 @@ struct Config
             fout << shellName << endl;
             fout << terminator << endl;
             fout << historySize << endl;
-	     fout << newNameSize << endl;
+	    fout << newNameSize << endl;
             fout.close();
         }
     }
@@ -72,6 +72,7 @@ string returnValue = "";
 string returnMessage = "";
 Config config;
 HistQueue queue;
+Array<string> aliasList;
 
 void Initialize ();
 void HALshell ();
