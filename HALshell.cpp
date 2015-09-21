@@ -100,19 +100,19 @@ void ProcessCommand (string commandLine)
         SendCommandLine (commandLine);
         exit (0);
     }
-    else if (commandLine.substr(0, 12) == "setshellname")
+    else if (commandLine.substr(0, 13) == "setshellname ")
     {
         config.shellName = commandLine.substr(13);
         config.Save();
         return;
     } 
-    else if (commandLine.substr(0, 13) == "setterminator")
+    else if (commandLine.substr(0, 14) == "setterminator ")
     {
         config.terminator = commandLine.substr(14);
         config.Save();
         return;
     }
-    else if (commandLine.substr(0, 14) == "sethistorysize")
+    else if (commandLine.substr(0, 15) == "sethistorysize ")
     {
         if(atoi(commandLine.substr(15).c_str()) > 0)
 	{
@@ -137,7 +137,7 @@ void ProcessCommand (string commandLine)
       	queue.PrintHistory();
         return;
     }
-    else if (commandLine.substr(0, 14) == "setnewnamesize")
+    else if (commandLine.substr(0, 15) == "setnewnamesize ")
     {
         if(atoi(commandLine.substr(15).c_str()) > 0)
 	{
@@ -159,13 +159,14 @@ void ProcessCommand (string commandLine)
     {
         int noOfArguments = 0;
         string cmdArguments[10];
-        for (int i = 0; i < commandLine.length (); i++)
+        for (int i = 0; i < commandLine.length(); i++)
         {
             if (commandLine[i] == ' ')
             {
                 noOfArguments ++;
             }
             else cmdArguments[noOfArguments] += commandLine[i];
+	    noOfArguments++;
         }
         
         if (noOfArguments == 1)
@@ -183,9 +184,10 @@ void ProcessCommand (string commandLine)
                         aliasList.Delete(i);
                     else
                     {
-                        aliasList.Delete(i);
+			// THIS IS BROKEN ?
                         aliasList.Add(commandLine.substr(11));
-                        break;
+                        aliasList.Delete(i);
+			break;
                     }
                 }
             }
@@ -204,7 +206,68 @@ void ProcessCommand (string commandLine)
         }
         return;
     }
-    
+    else if (commandLine.substr(0, 14) == "writenewnames ")
+    {
+        string filename = commandLine.substr(14);
+        ofstream fout;
+        fout.open(filename.c_str());
+        if (!fout)
+            cout << "Error opening filename " << filename << endl;
+
+        for (int i = 0; i < aliasList.Length(); i++)
+        {
+            fout << aliasList[i] << endl;;
+        }
+        fout.close();
+        return;
+    }
+    else if (commandLine.substr(0, 13) == "readnewnames ")
+    {
+        string filename = commandLine.substr(13);
+        ifstream fin;
+        fin.open(filename.c_str());
+        if (!fin)
+            cout << "Error opening file " << filename << endl;
+
+        do
+        {
+            string toAdd, alias;
+            getline(fin, toAdd);
+    	    if (toAdd.empty()) break;
+
+	    for (int i = 0; i < toAdd.length(); i++)
+            {
+		if (toAdd[i] == ' ') break;
+		else alias += toAdd[i];
+            }
+	    unsigned int pos = aliasList.Find(alias, alias.length());
+            if (pos < 99999)
+		aliasList.Add(toAdd);
+	    else
+    	    {
+		aliasList.Add(toAdd);
+		aliasList.Delete(pos);
+	    }
+        } while (fin);
+        return;
+    }
+    else 
+    {
+        string alias;
+	for (int i = 0; i < commandLine.length(); i++)
+        {
+            if (commandLine[i]  == ' ') break;
+            else alias += commandLine[i];
+        }  
+        unsigned int pos = aliasList.Find(alias, alias.length());
+        if (pos < 99999)
+        {
+            string newCmd = aliasList[pos].substr(alias.length()+1);
+	    ProcessCommand(newCmd);
+	    return;
+        }
+    }
+
     commandSent = SendCommandLine (commandLine);
     if (commandSent)
     {

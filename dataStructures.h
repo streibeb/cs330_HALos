@@ -59,6 +59,7 @@ public:
     
     string& operator [] (unsigned int index);
     bool IsFull();
+    unsigned int Find(const string& str, const int);
     unsigned int Length();
     void Add(string item);
     void Clear();
