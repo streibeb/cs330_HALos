@@ -224,8 +224,8 @@ Array::Array(unsigned int newSize)
 
 Array::~Array()
 {
-    delete [] data;
-    data = NULL;
+    //delete [] data;
+    //data = NULL;
 }
 
 void Array::SetSize(unsigned int i)
@@ -236,9 +236,9 @@ void Array::SetSize(unsigned int i)
     {
         tempData[i] = data[i];
     }
-    delete [] data;
+    //delete [] data;
     data = tempData;
-    delete [] tempData;
+    //delete [] tempData;
     return;
 }
 
@@ -250,6 +250,18 @@ string& Array::operator [](unsigned int index)
 bool Array::IsFull()
 {
     return (size == MAX_SIZE);
+}
+
+unsigned int Array::Find(const string& str, const int length)
+{
+    for (int i = 0; i < size; i++)
+    {
+	if (data[i].substr(0, length) == str)
+        {
+	    return i;
+	}
+    }
+    return 99999;
 }
 
 unsigned int Array::Length()
