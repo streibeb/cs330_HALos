@@ -180,11 +180,10 @@ void HistQueue::changeSize(int newSize)
 	{
 		char ans;
 		cout << "Are you sure you would like to reduce history size? Some history may be lost. (You must enter 'y' or 'n')" << endl << "Reduce size? ";
-		while(ans != 'y' || ans != 'n')
+		while(ans != 'y' && ans != 'n')
 		{
 			cin >> ans;
 			ans = tolower(ans);
-			cout << "A: " << ans << endl;
 		}
 		if(ans == 'n')
 		{
@@ -224,8 +223,7 @@ Array::Array(unsigned int newSize)
 
 Array::~Array()
 {
-    //delete [] data;
-    //data = NULL;
+
 }
 
 void Array::SetSize(unsigned int i)
@@ -236,9 +234,8 @@ void Array::SetSize(unsigned int i)
     {
         tempData[i] = data[i];
     }
-    //delete [] data;
+    delete [] data;
     data = tempData;
-    //delete [] tempData;
     return;
 }
 

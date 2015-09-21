@@ -228,10 +228,12 @@ void ProcessCommand (string commandLine)
         if (!fin)
             cout << "Error opening file " << filename << endl;
 
-        while (fin)
+        do
         {
             string toAdd, alias;
             getline(fin, toAdd);
+    	    if (toAdd.empty()) break;
+
 	    for (int i = 0; i < toAdd.length(); i++)
             {
 		if (toAdd[i] == ' ') break;
@@ -245,8 +247,26 @@ void ProcessCommand (string commandLine)
 		aliasList.Add(toAdd);
 		aliasList.Delete(pos);
 	    }
-        }
+        } while (fin);
         return;
+    }
+    else 
+    {
+        string alias;
+	for (int i = 0; i < commandLine.length(); i++)
+        {
+            if (commandLine[i]  == ' ') break;
+            else alias += commandLine[i];
+        }  
+        unsigned int pos = aliasList.Find(alias, alias.length());
+        if (pos < 99999)
+        {
+            string newCmd = aliasList[pos].substr(alias.length()+1);
+cout << "Old Command:" << commandLine << endl;
+cout << "New Command:" << newCmd << endl;
+	    ProcessCommand(newCmd);
+	    return;
+        }
     }
 
     commandSent = SendCommandLine (commandLine);
