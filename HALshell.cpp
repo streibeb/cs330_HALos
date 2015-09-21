@@ -155,17 +155,18 @@ void ProcessCommand (string commandLine)
         cout << config.newNameSize << endl; 
         return;
     }
-    else if (commandLine.substr(0, 11) == "setnewname ")
+    else if (commandLine.substr(0, 10) == "setnewname")
     {
         int noOfArguments = 0;
         string cmdArguments[10];
-        for (int i = 0; i < commandLine.length (); i++)
+        for (int i = 0; i < commandLine.length(); i++)
         {
             if (commandLine[i] == ' ')
             {
                 noOfArguments ++;
             }
             else cmdArguments[noOfArguments] += commandLine[i];
+	    noOfArguments++;
         }
         
         if (noOfArguments == 1)
@@ -262,8 +263,6 @@ void ProcessCommand (string commandLine)
         if (pos < 99999)
         {
             string newCmd = aliasList[pos].substr(alias.length()+1);
-cout << "Old Command:" << commandLine << endl;
-cout << "New Command:" << newCmd << endl;
 	    ProcessCommand(newCmd);
 	    return;
         }
