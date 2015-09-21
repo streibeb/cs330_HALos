@@ -166,8 +166,8 @@ void ProcessCommand (string commandLine)
                 noOfArguments ++;
             }
             else cmdArguments[noOfArguments] += commandLine[i];
-	    noOfArguments++;
         }
+	noOfArguments++;
         
         if (noOfArguments == 1)
         {
@@ -175,28 +175,18 @@ void ProcessCommand (string commandLine)
         }
         else if (aliasList.Length() > 0)
         {
-            for (int i = 0; i < aliasList.Length(); i++)
+            unsigned int pos;
+            pos = aliasList.Find(cmdArguments[1], cmdArguments[1].length());
+            if (pos < 99999)
             {
-                string alias = cmdArguments[1];
-                if (aliasList[i].substr(0, alias.length()) == alias)
-                {
-                    if (noOfArguments == 2)
-                        aliasList.Delete(i);
-                    else
-                    {
-			// THIS IS BROKEN ?
-                        aliasList.Add(commandLine.substr(11));
-                        aliasList.Delete(i);
-			break;
-                    }
-                }
+                aliasList.Delete(pos);
+                aliasList.Add(commandLine.substr(11));
+            }
+            else
+            {
+                aliasList.Add(commandLine.substr(11));
             }
         }
-        else
-        {
-            aliasList.Add(commandLine.substr(11));
-        }
-        return;
     }
     else if (commandLine.substr(0, 12) == "shownewnames")
     {
