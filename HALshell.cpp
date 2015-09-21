@@ -54,34 +54,29 @@ string GetCommandLine (int commandCount)
 void ProcessCommand (string commandLine)
 {
     bool commandSent;
-	//Branches to check for if the user is trying to redo a previously entered command via the '!' character.
-    //First branch enqueues all relevant commands into the history, excluding the '!' command.
-	if(commandLine.substr(0,1) != "!")
+    if(commandLine.substr(0,1) != "!")
     {
         queue.Enqueue(commandLine);
     }
-	//Second branch runs the most recent command.
     else if(commandLine.length() == 1)
     {
-		ProcessCommand(queue.retrieveCmd());
-		return;
+	ProcessCommand(queue.retrieveCmd());
+	return;
     }
-	//Third branch runs if the user is trying to run the n'th recent commnad.
     else
     {
-		//Error checking for if the history actually exists.
-		string check = queue.retrieveCmd(atoi(commandLine.substr(2).c_str()));
-		if(check != "Invalid history request!")
-		{
-			ProcessCommand(queue.retrieveCmd(atoi(commandLine.substr(2).c_str())));
-			return;
-		}
-		else
-		{
-			cout << check << endl;
-			return;
-		}
+	string check = queue.retrieveCmd(atoi(commandLine.substr(2).c_str()));
+	if(check != "Invalid history request!")
+	{
+	    ProcessCommand(queue.retrieveCmd(atoi(commandLine.substr(2).c_str())));
+	    return;
 	}
+	else
+	{
+	    cout << check << endl;
+	    return;
+	}
+    }
 
     if (commandLine == "result")
     {
@@ -105,109 +100,105 @@ void ProcessCommand (string commandLine)
         SendCommandLine (commandLine);
         exit (0);
     }
-    else if (commandLine.substr(0, 13) == "setshellname ") //Branch for setting the name of the Shell.
+    else if (commandLine.substr(0, 13) == "setshellname ")
     {
         config.shellName = commandLine.substr(13);
         config.Save();
         return;
     } 
-    else if (commandLine.substr(0, 14) == "setterminator ") //Branch for setting the terminator symbol.
+    else if (commandLine.substr(0, 14) == "setterminator ")
     {
         config.terminator = commandLine.substr(14);
         config.Save();
         return;
     }
-    else if (commandLine.substr(0, 15) == "sethistorysize ") //Branch for setting the size of history.
+    else if (commandLine.substr(0, 15) == "sethistorysize ")
     {
-        if(atoi(commandLine.substr(15).c_str()) > 0) //Ensures queue is not reduced to 0.
-		{
+        if(atoi(commandLine.substr(15).c_str()) > 0)
+	{
             config.historySize = atoi(commandLine.substr(15).c_str());
             queue.changeSize(atoi(commandLine.substr(15).c_str()));
-			config.Save();
-		}
-		else
-		{
-			cout << "History size must be greater than 0. " << "No changes made." << endl;
-		}
-		return;
+	    config.Save();
+	}
+	else
+	{
+	    cout << "History size must be greater than 0. "
+<< "No changes made." << endl;
+	}
+	return;
     }
-    else if (commandLine.substr(0,15) == "showhistorysize") //Branch for showing the size of the history.
+    else if (commandLine.substr(0,15) == "showhistorysize")
     {
         cout << config.historySize << endl;
         return;
     }
-    else if (commandLine.substr(0, 11) == "showhistory") //Branch for showing the history itself.
+    else if (commandLine.substr(0, 11) == "showhistory")
     {
       	queue.PrintHistory();
         return;
     }
-    else if (commandLine.substr(0, 15) == "setnewnamesize ") //Branch for setting the size of the alias list.
+    else if (commandLine.substr(0, 15) == "setnewnamesize ")
     {
-        if(atoi(commandLine.substr(15).c_str()) > 0) //Branch to make sure that the list is not reduced to 0.
-		{
+        if(atoi(commandLine.substr(15).c_str()) > 0)
+	{
             config.newNameSize = atoi(commandLine.substr(15).c_str());
-			config.Save();
-		}
-		else
-		{
+	    config.Save();
+	}
+	else
+	{
             cout << "New Name list size must be greater than 0. No changes made." << endl;
         }
         return;
     }
-    else if (commandLine.substr(0, 15) == "shownewnamesize") //Branch to show the size of the alias list.
+    else if (commandLine.substr(0, 15) == "shownewnamesize")
     {
         cout << config.newNameSize << endl; 
         return;
     }
-    else if (commandLine.substr(0, 11) == "setnewname ") //Branch to create or delete entries in the alias list, or clear the whole list.
+    else if (commandLine.substr(0, 10) == "setnewname")
     {
-		//Checks to see how many arguments were provided with the setnewname command.
         int noOfArguments = 0;
         string cmdArguments[10];
-        for (int i = 0; i < commandLine.length (); i++)
+        for (int i = 0; i < commandLine.length(); i++)
         {
-            if (commandLine[i] == ' ') //If a space is encountered, increase the number of arguments by 1.
+            if (commandLine[i] == ' ')
             {
                 noOfArguments ++;
             }
-			//If not, add the current character of the command line to the cmdArguments. If no arguments are there, only setnewname will be in the cmdArguments.
-            else
-			{
-				cmdArguments[noOfArguments] += commandLine[i]; 
-			}
-			noOfArguments ++;
-		}
+            else cmdArguments[noOfArguments] += commandLine[i];
+	    noOfArguments++;
+        }
         
-        if (noOfArguments == 1) //If there are no arguments (ie. only 'setnewname' is on the command line), clear the alias list.
+        if (noOfArguments == 1)
         {
             aliasList.Clear();
         }
-        else if (aliasList.Length() > 0) //If this is not the first alias in the list, and there are arguments.
+        else if (aliasList.Length() > 0)
         {
-            for (int i = 0; i < aliasList.Length(); i++) 
+            for (int i = 0; i < aliasList.Length(); i++)
             {
                 string alias = cmdArguments[1];
-                if (aliasList[i].substr(0, alias.length()) == alias) //Check to see if the specified alias already exists.
+                if (aliasList[i].substr(0, alias.length()) == alias)
                 {
-                    if (noOfArguments == 2) //If it does exist, and there are two arguments on the command line (ie. 'setnewname' and an alias name), delete that alias.
+                    if (noOfArguments == 2)
                         aliasList.Delete(i);
-                    else //If there are 3 arguments, add the 'new' alias to the end of the list, and delete the 'old' alias.
+                    else
                     {
-						//THIS IS BROKEN ?
+			// THIS IS BROKEN ?
                         aliasList.Add(commandLine.substr(11));
                         aliasList.Delete(i);
-						break;
+			break;
                     }
                 }
             }
         }
-        else //If this IS the first alias, simply add it to the list.
+        else
         {
             aliasList.Add(commandLine.substr(11));
         }
         return;
     }
-    else if (commandLine.substr(0, 12) == "shownewnames") //Branch to display the list of alias'.
+    else if (commandLine.substr(0, 12) == "shownewnames")
     {
         for (int i = 0; i < aliasList.Length(); i++)
         {
@@ -215,7 +206,7 @@ void ProcessCommand (string commandLine)
         }
         return;
     }
-    else if (commandLine.substr(0, 14) == "writenewnames ") //Writes the list of alias' to a specified file.
+    else if (commandLine.substr(0, 14) == "writenewnames ")
     {
         string filename = commandLine.substr(14);
         ofstream fout;
@@ -230,7 +221,7 @@ void ProcessCommand (string commandLine)
         fout.close();
         return;
     }
-    else if (commandLine.substr(0, 13) == "readnewnames ") //Loads the alias list from a specified file.
+    else if (commandLine.substr(0, 13) == "readnewnames ")
     {
         string filename = commandLine.substr(13);
         ifstream fin;
@@ -238,27 +229,43 @@ void ProcessCommand (string commandLine)
         if (!fin)
             cout << "Error opening file " << filename << endl;
 
-        while (fin)
+        do
         {
             string toAdd, alias;
             getline(fin, toAdd);
-			for (int i = 0; i < toAdd.length(); i++)
+    	    if (toAdd.empty()) break;
+
+	    for (int i = 0; i < toAdd.length(); i++)
             {
-				if (toAdd[i] == ' ') break;
-				else alias += toAdd[i];
+		if (toAdd[i] == ' ') break;
+		else alias += toAdd[i];
             }
-			unsigned int pos = aliasList.Find(alias, alias.length());
+	    unsigned int pos = aliasList.Find(alias, alias.length());
             if (pos < 99999)
-			{
-				aliasList.Add(toAdd);
-			}
-			else
+		aliasList.Add(toAdd);
+	    else
     	    {
-				aliasList.Add(toAdd);
-				aliasList.Delete(pos);
-			}
-        }
+		aliasList.Add(toAdd);
+		aliasList.Delete(pos);
+	    }
+        } while (fin);
         return;
+    }
+    else 
+    {
+        string alias;
+	for (int i = 0; i < commandLine.length(); i++)
+        {
+            if (commandLine[i]  == ' ') break;
+            else alias += commandLine[i];
+        }  
+        unsigned int pos = aliasList.Find(alias, alias.length());
+        if (pos < 99999)
+        {
+            string newCmd = aliasList[pos].substr(alias.length()+1);
+	    ProcessCommand(newCmd);
+	    return;
+        }
     }
 
     commandSent = SendCommandLine (commandLine);
@@ -375,9 +382,9 @@ endl;
 
 void Initialize ()
 {
-    config.Load(); //Loads the Shell configuration.
-    queue = HistQueue(config.historySize); //Sets up the command history queue.
-    aliasList = Array(config.newNameSize); //Sets up the alias list.
+    config.Load();
+    queue = HistQueue(config.historySize);
+    aliasList = Array(config.newNameSize);
 
     cout << "HALos: " << config.shellName << " OK" << endl;
     usleep (SLEEP_DELAY);
