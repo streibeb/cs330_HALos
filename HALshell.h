@@ -22,6 +22,7 @@ using namespace std;
     #include "HALglobals.h"
 #endif
 
+//Struct that contains the details of the Shell's configuration.
 struct Config
 {
     string shellName;
@@ -29,7 +30,7 @@ struct Config
     int historySize;
     unsigned int newNameSize;
 
-    Config()
+    Config() //Default constructor.
     {
         shellName = "HALshell";
 	terminator = ">";
@@ -37,7 +38,7 @@ struct Config
 	newNameSize = 10;
     }
 
-    void Load()
+    void Load() //Reads from the 'config' file into the Shell; ie. loads the default configuration for the Shell.
     {
         ifstream fin;
         fin.open("config");
@@ -51,7 +52,7 @@ struct Config
         }
     }
 
-    void Save()
+    void Save() //Writes the the file 'config' the current configuration of the Shell.
     {
         ofstream fout;
         fout.open("config");
@@ -66,6 +67,7 @@ struct Config
     }
 };
 
+//Global declarations for the shell.
 pid_t HALosPid;
 string returnPid = "";
 string returnValue = "";
