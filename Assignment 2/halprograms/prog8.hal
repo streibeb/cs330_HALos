@@ -1,0 +1,11 @@
+function .main
+variable .velocity
+velocity .integer
+put      .velocity
+put      .324
+put      .velocity
+constant .gravity
+gravity  .float
+put      .98.54
+put      .gravity
+return   .21

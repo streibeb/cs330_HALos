@@ -1,0 +1,6 @@
+function     :main
+variable     :i
+i            :string
+put          :Feelings! Nothing more than feelings!
+set          :i
+return       :Oakey doakey!

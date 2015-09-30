@@ -1,0 +1,9 @@
+function :main
+file     :keyboard
+file     :display
+file     :infile
+infile   :input
+file     :outfile
+outfile  :output
+coresnapshot :
+return   :

@@ -1,0 +1,8 @@
+function     :main
+file         :display
+open         :display
+label        :start
+put          :'executing
+write        :display
+jump         :start
+return       :

@@ -1,0 +1,12 @@
+comment      :File Tester
+comment      :Author: Robert J. Hilderman
+comment      :Copyright 2015
+
+file         :halprograms/crapolaOUT1
+halprograms/crapolaOUT1 :output
+
+function     :main
+file         :halprograms/crapolaIN1
+halprograms/crapolaIN1 :input
+coresnapshot :
+return       :'OK

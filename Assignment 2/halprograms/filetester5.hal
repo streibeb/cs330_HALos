@@ -1,0 +1,70 @@
+comment      :File Tester
+comment      :This program demonstrates the use of pass-by-reference for file I/O.
+comment      :Author: Robert J. Hilderman
+comment      :Copyright 2015
+
+file         :keyboard
+file         :display
+
+function     :main
+open         :keyboard
+open         :display
+variable     :data
+data         :string
+file         :crapfileIN
+crapfileIN   :input
+file         :crapfileOUT
+crapfileOUT  :output
+label        :start
+put          :'halprograms/crapolaIN1
+set          :crapfileIN
+put          :crapfileIN
+call         :openfile
+unput        :
+put          :'halprograms/crapolaOUT1
+set          :crapfileOUT
+put          :crapfileOUT
+call         :openfile
+unput        :
+put          :crapfileIN
+call         :readfile
+set          :data
+unput        :
+put          :data
+put          :crapfileOUT
+call         :writefile
+unput        :
+unput        :
+newline      :crapfileOUT
+close        :crapfileIN
+close        :crapfileOUT
+put          :'Continue? 
+write        :display
+read         :keyboard
+put          :'yes
+compare      :
+jumpequal    :start
+return       :'OK
+
+function     :openfile
+put          :argument
+reference    :file
+open         :file
+return       :
+
+function     :readfile
+variable     :data
+data         :string
+put          :argument
+reference    :file
+read         :file
+set          :data
+return       :data
+
+function     :writefile
+put          :argument
+reference    :file
+put          :argument
+write        :file
+return       :
+

@@ -1,0 +1,27 @@
+function     :main
+file         :display
+open         :display
+label        :start
+put          :'executing 1
+put          :'executing 2
+put          :'executing 3
+put          :'executing 4
+put          :'executing 5
+put          :'executing 6
+put          :'executing 7
+write        :display
+newline      :display
+write        :display
+newline      :display
+write        :display
+newline      :display
+write        :display
+newline      :display
+write        :display
+newline      :display
+write        :display
+newline      :display
+write        :display
+newline      :display
+jump         :start
+return       :

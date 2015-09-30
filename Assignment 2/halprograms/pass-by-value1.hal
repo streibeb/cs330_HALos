@@ -1,0 +1,27 @@
+function :main
+variable :a
+a        :integer
+variable :b
+b        :integer
+variable :c
+c        :integer
+put      :10
+set      :a
+put      :20
+set      :b
+put      :a
+put      :b
+call     :sum
+set      :c
+unput    :
+unput    :
+return   :c
+
+function :sum
+variable :d
+d        :integer
+put      :argument
+put      :argument
+add      :
+set      :d
+return   :d
