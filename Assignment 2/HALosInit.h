@@ -9,13 +9,18 @@
 
 #include <iostream>
 #include <fstream>
-
 using namespace std;
+
+#ifndef HAL_CPU_SCHEDULING_POLICY_CRITERIA_H
+    #include "HALcpuSchedulingPolicyCriteria.h"
+#endif
 
 int READY_QUEUE_SIZE;
 int FILE_TABLE_SIZE;
 int IO_QUEUE_SIZE;
 int MEMORY_SIZE;
+int NO_OF_READY_QUEUES;
+cpuSchedulingPolicyCriteria* cpuSchedulingPolicies;
 
 int GetHALosVariables ()
 {
@@ -44,6 +49,39 @@ int GetHALosVariables ()
     osFile.ignore (256, ':');
     getline (osFile, variableValue);
     IO_QUEUE_SIZE = atoi (variableValue.c_str ());
+
+    osFile >> variableDescription;
+    osFile.ignore (256, ':');
+    getline (osFile, variableValue);
+    NO_OF_READY_QUEUES = atoi (variableValue.c_str ());
+
+    cpuSchedulingPolicies = 
+	new cpuSchedulingPolicyCriteria[NO_OF_READY_QUEUES];
+    for (int i = 0; i < NO_OF_READY_QUEUES; i++)
+    {
+        osFile >> variableDescription;
+        osFile.ignore(256, ':');
+        getline (osFile, variableValue);
+        cpuSchedulingPolicies[i].type = variableValue;
+
+        osFile >> variableDescription;
+        osFile.ignore(256, ':');
+        getline (osFile, variableValue);
+        cpuSchedulingPolicies[i].quantumLengthMultiplier = 
+            atoi (variableValue.c_str ());
+
+        osFile >> variableDescription;
+        osFile.ignore(256, ':');
+        getline (osFile, variableValue);
+        cpuSchedulingPolicies[i].contextSwitchesUntilMoveDown =
+            atoi (variableValue.c_str ());
+
+        osFile >> variableDescription;
+        osFile.ignore(256, ':');
+        getline (osFile, variableValue);
+        cpuSchedulingPolicies[i].contextSwitchesUntilMoveUp =
+            atoi (variableValue.c_str ());
+    }
 
     osFile.close ();
 

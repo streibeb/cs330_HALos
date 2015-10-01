@@ -20,6 +20,10 @@ using namespace std;
     #include "HALosInit.h"
 #endif
 
+#ifndef HAL_READY_QUEUE_H
+    #include "HALreadyQueue.h"
+#endif
+
 #ifndef HAL_QUEUE_H
     #include "HALqueue.h"
 #endif
@@ -32,7 +36,7 @@ using namespace std;
     #include "HALglobals.h"
 #endif
 
-QueueType readyQueue (READY_QUEUE_SIZE);
+ReadyQueueType readyQueue (READY_QUEUE_SIZE, NO_OF_READY_QUEUES, cpuSchedulingPolicies);
 QueueType displayQueue (IO_QUEUE_SIZE);
 QueueType keyboardQueue (IO_QUEUE_SIZE);
 QueueType diskQueue (IO_QUEUE_SIZE);

@@ -19,26 +19,11 @@ using namespace std;
     #include "HALglobals.h"
 #endif
 
-extern int FILE_TABLE_SIZE;
+#ifndef HAL_PROCESS_DESCRIPTOR_H
+    #include "HALprocessDescriptor.h"
+#endif
 
-struct processDescriptor
-{
-    processDescriptor () : fileTable (FILE_TABLE_SIZE) {}
-    string pid;
-    string type;
-    string status;
-    string command;
-    string arguments [MAX_COMMAND_LINE_ARGUMENTS];
-    string returnValue;
-    FileTableType fileTable;
-    int systemCallFileIndex;
-    string systemCall;
-    string systemCallParameter1;
-    string systemCallParameter2;
-    string systemCallParameter3;
-    string systemCallBuffer;
-    string systemCallResult;
-};
+extern int FILE_TABLE_SIZE;
 
 class QueueType
 {

@@ -17,8 +17,8 @@ all:		HAL9000 HALos HALkeyboardDriver HALdisplayDriver HALdiskDriver HALshell
 HAL9000:	HAL9000.o HALmemory.o
 		$(COMPILER) HAL9000.o HALmemory.o -o HAL9000
 
-HALos:		HALos.o HALqueue.o HALmemory.o HALfileTable.o
-		$(COMPILER) HALos.o HALqueue.o HALmemory.o HALfileTable.o -o HALos
+HALos:		HALos.o HALreadyQueue.o HALqueue.o HALmemory.o HALfileTable.o
+		$(COMPILER) HALos.o HALreadyQueue.o HALqueue.o HALmemory.o HALfileTable.o -o HALos
 
 HALkeyboardDriver: HALkeyboardDriver.o
 		$(COMPILER) HALkeyboardDriver.o -o HALkeyboardDriver
@@ -55,6 +55,9 @@ HALmemory.o:	HALmemory.cpp HALmemory.h
 
 HALqueue.o:	HALqueue.cpp HALqueue.h
 		$(COMPILER) $(OPTS) $(DEFS) $(INCS) HALqueue.cpp $(LIBS)
+
+HALreadyQueue.o: HALreadyQueue.cpp HALreadyQueue.h
+		$(COMPILER) $(OPTS) $(DEFS) $(INCS) HALreadyQueue.cpp $(LIBS)
 
 HALfileTable.o:	HALfileTable.cpp HALfileTable.h
 		$(COMPILER) $(OPTS) $(DEFS) $(INCS) HALfileTable.cpp $(LIBS)

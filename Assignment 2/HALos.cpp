@@ -245,6 +245,7 @@ void HandleHALkeyboardDriverInterrupt ()
     if (cpuProcess.pid.length () == 0)
     {
         cpuProcess = keyboardProcess;
+        cpuProcess = readyQueue.SetQueueNo(cpuProcess);
         SendMessageToHAL9000 (cpuProcess);
     }
     else
@@ -277,6 +278,7 @@ void HandleHALdisplayDriverInterrupt ()
     if (cpuProcess.pid.length () == 0)
     {
         cpuProcess = displayProcess;
+        cpuProcess = readyQueue.SetQueueNo(cpuProcess);
         SendMessageToHAL9000 (cpuProcess);
     }
     else
@@ -352,6 +354,7 @@ void HandleHALdiskDriverInterrupt ()
     if (cpuProcess.pid.length () == 0)
     {
         cpuProcess = diskProcess;
+        cpuProcess = readyQueue.SetQueueNo(cpuProcess);
         SendMessageToHAL9000 (cpuProcess);
     }
     else
@@ -434,6 +437,7 @@ void HandleSystemCall (bool okToScheduleNextProcess)
                 if (cpuProcess.pid.length () == 0)
                 {
                     cpuProcess = process;
+                    cpuProcess = readyQueue.SetQueueNo(cpuProcess);
                     SendMessageToHAL9000 (cpuProcess);
                 }
                 else
@@ -574,6 +578,7 @@ void HandleSystemCall (bool okToScheduleNextProcess)
             if (cpuProcess.pid.length () == 0)
             {
                 cpuProcess = process;
+                cpuProcess = readyQueue.SetQueueNo(cpuProcess);
                 SendMessageToHAL9000 (cpuProcess);
             }
             else
@@ -1537,7 +1542,11 @@ void Cull (string command, string arguments [])
         {
             // Otherwise, find and remove the process with pid == arguments [0].
             // It could be in the ready queue. If found there, cull it.
-            queueLength = readyQueue.Length ();
+            for (int j = 0; j < NO_OF_READY_QUEUES; j++)
+            {
+                queueLength = readyQueue.Length(j);
+                if (queueLength != 0) break;
+            }
             processFound = false;
             for (i = 0; i < queueLength; i ++)
             {
@@ -1742,7 +1751,11 @@ void Cull (string command, string arguments [])
         {
             // Otherwise, find and remove the foreground process.
             // It could be in the ready queue. If found there, cull it.
-            queueLength = readyQueue.Length ();
+            for (int j = 0; j < NO_OF_READY_QUEUES; j++)
+            {
+                queueLength = readyQueue.Length (j);
+                if (queueLength != 0) break;
+            }
             processFound = false;
             for (i = 0; i < queueLength; i ++)
             {
