@@ -1,0 +1,23 @@
+comment      :File Tester
+comment      :Author: Robert J. Hilderman
+comment      :Copyright 2015
+
+file         :a
+a            :input
+
+function     :main
+variable     :counter
+counter      :integer
+put          :0
+set          :counter
+put          :'halprograms/crapola_a
+set          :a
+label        :start
+open         :a
+close        :a
+put          :counter
+put          :1
+add          :
+set          :counter
+jump         :start
+return       :'OK

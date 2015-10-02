@@ -1,0 +1,42 @@
+file           :display
+
+function       :main
+open           :display
+variable       :message
+message        :string
+call           :notmain1
+set            :message
+put            :message
+write          :display
+newline        :display
+close          :display
+return         :message
+
+function       :notmain1
+variable       :message
+message        :string
+call           :notmain2
+set            :message
+return         :message
+
+function       :notmain2
+variable       :message
+message        :string
+call           :notmain3
+set            :message
+return         :message
+
+function       :notmain3
+variable       :message
+message        :string
+call           :notmain4
+set            :message
+return         :message
+
+function       :notmain4
+variable       :message
+message        :string
+put            :'As Austin Powers would say, "Groovy, Baby!"
+set            :message
+return         :message
+

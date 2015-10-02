@@ -1,0 +1,163 @@
+Script started on Mon Sep 21 05:31:39 2015
+Script on a049414[1]% HALstart
+
+HALstart: powering up HAL9000 ...
+HALstart: HAL9000 OK
+HAL9000: initializing ...
+HAL9000: boot sequence started ...
+HAL9000: loading HALbios ...
+HAL9000: HALbios OK
+HALbios: initializing ...
+HALbios: checking memory ...
+HALbios: memory OK
+HALbios: loading HALos ...
+HALbios: HALos OK
+HALos: initializing ...
+HALos: loading HALshell ...
+HALos: HALshell OK
+HALshell: initializing ...
+
+HALshell[1]> 
+HALshell[1]> showhistory
+showhistory
+HALshell[2]> ! 1
+showhistory
+showhistory
+HALshell[3]> setshellname hsh
+hsh[4]> showhistory
+showhistory
+showhistory
+setshellname hsh
+showhistory
+hsh[5]> setshellname myshell
+myshell[6]> showhistory
+showhistory
+showhistory
+setshellname hsh
+showhistory
+setshellname myshell
+showhistory
+myshell[7]> ! 4
+hsh[8]> ! 2
+showhistory
+showhistory
+setshellname hsh
+showhistory
+setshellname myshell
+showhistory
+setshellname hsh
+showhistory
+hsh[9]> !
+showhistory
+showhistory
+setshellname hsh
+showhistory
+setshellname myshell
+showhistory
+setshellname hsh
+showhistory
+showhistory
+hsh[10]> ! 5
+myshell[11]> ! 3
+showhistory
+setshellname hsh
+showhistory
+setshellname myshell
+showhistory
+setshellname hsh
+showhistory
+showhistory
+setshellname myshell
+showhistory
+myshell[12]> ! 20
+Invalid history request!
+myshell[13]> sethistorysize 5
+myshell[14]> showhistory
+showhistory
+setshellname myshell
+showhistory
+sethistorysize 5
+showhistory
+myshell[15]> setnewname sh1 showhistory
+myshell[16]> 
+myshell[16]> sh1
+sethistorysize 5
+showhistory
+setnewname sh1 showhistory
+sh1
+showhistory 
+myshell[17]> setnewname sh2 sh1
+myshell[18]> sh2
+showhistory 
+setnewname sh2 sh1
+sh2
+sh1 
+showhistory 
+myshell[19]> writenewnames mynewnames1
+myshell[20]> shownewnames
+sh1 showhistory
+sh2 sh1
+myshell[21]> sh2
+writenewnames mynewnames1
+shownewnames
+sh2
+sh1 
+showhistory 
+myshell[22]> setnewname showhistory showhistory
+I can't let you do that Dave.
+(You cannot have an alias be equal to itself.)
+myshell[23]> setnewname sh1 sh1
+I can't let you do that Dave.
+(You cannot have an alias be equal to itself.)
+myshell[24]> sh1
+showhistory 
+setnewname showhistory showhistory
+setnewname sh1 sh1
+sh1
+showhistory 
+myshell[25]> setnewname st1 setterminator
+myshell[26]> setnewname st2 setterminator :
+myshell[27]> setnewname st3 setterminator =>>
+myshell[28]> st3
+myshell[29]=>>  st2
+myshell[30]:  st1 =>>
+myshell[31]=>> setnewname sh1
+myshell[32]=>> sh1
+myshell: command not found
+myshell[33]=>> writenewnames mynewnames 2
+myshell[34]=>> setshellname HALshell
+HALshell[35]=>> sh2
+HALshell: command not found
+HALshell[36]=>> shownewnames
+sh2 sh1
+st1 setterminator
+st2 setterminator :
+st3 setterminator =>>
+HALshell[37]=>> setnewname
+HALshell[38]=>> shownewnames
+HALshell[39]=>> readnewnames mynewnames 2
+HALshell[40]=>> shownewnames
+sh2 sh1
+st1 setterminator
+st2 setterminator :
+st3 setterminator =>>
+HALshell[41]=>> st ^C
+HALshell[41]=>> st1 >
+HALshell[42]> readnewnames mynewnames1
+HALshell[43]> shownewnames
+sh2 sh1
+st1 setterminator
+st2 setterminator :
+st3 setterminator =>>
+sh1 showhistory
+sh2 sh1
+HALshell[44]> shutdown
+
+HALshell: terminating ...
+HALos: terminating ...
+HAL9000: powering down ...
+
+Script on a049414[2]% exit
+exit
+
+Script done on Mon Sep 21 05:35:56 2015

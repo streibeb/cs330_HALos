@@ -1,0 +1,71 @@
+comment      :File Tester
+comment      :Author: Robert J. Hilderman
+comment      :Copyright 2015
+
+
+file         :keyboard
+file         :display
+
+
+function     :main
+file         :halprograms/data
+halprograms/data :input
+label        :start
+open         :halprograms/data
+open         :keyboard
+open         :display
+label        :tryagain1
+put          :Enter an integer: 
+write        :display
+read         :keyboard
+compare      :integer
+jumpequal    :continue1
+unput        :
+put          :ERROR - integer required
+write        :display
+newline      :display
+jump         :tryagain1
+label        :continue1
+label        :tryagain2
+put          :Enter a float: 
+write        :display
+read         :keyboard
+compare      :float
+jumpequal    :continue2
+unput        :
+put          :ERROR - float required
+write        :display
+newline      :display
+jump         :tryagain2
+label        :continue2
+label        :tryagain3
+put          :Enter a string: 
+write        :display
+read         :keyboard
+compare      :string
+jumpequal    :continue3
+unput        :
+put          :ERROR - string required
+write        :display
+newline      :display
+jump         :tryagain3
+label        :continue3
+label        :tryagain4
+put          :Enter an empty string: 
+write        :display
+read         :keyboard
+compare      :emptystring
+jumpequal    :continue4
+unput        :
+put          :ERROR - empty string required
+write        :display
+newline      :display
+jump         :tryagain4
+label        :continue4
+write        :display
+newline      :display
+close        :keyboard
+close        :display
+close        :halprograms/data
+jump         :start
+return       :

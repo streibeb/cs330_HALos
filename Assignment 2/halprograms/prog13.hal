@@ -1,0 +1,15 @@
+function :main
+file     :display
+open     :display
+variable :a
+a        :integer
+a        :10
+put      :2
+put      :5
+set      :@a<1>
+put      :@a<1>
+coresnapshot :
+add      :
+write    :display
+newline  :display
+return   :

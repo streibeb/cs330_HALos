@@ -1,0 +1,14 @@
+function           :main
+variable           :a
+a                  :integer
+a                  :1
+put                :a
+call               :notmain1
+return             :
+
+function           :notmain1
+put                :argument
+reference          :b
+coresnapshot       :
+return             :
+

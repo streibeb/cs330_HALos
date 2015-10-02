@@ -100,19 +100,19 @@ void ProcessCommand (string commandLine)
         SendCommandLine (commandLine);
         exit (0);
     }
-    else if (commandLine.substr(0, 13) == "setshellname ")
+    else if (commandLine.substr(0, 12) == "setshellname")
     {
         config.shellName = commandLine.substr(13);
         config.Save();
         return;
     } 
-    else if (commandLine.substr(0, 14) == "setterminator ")
+    else if (commandLine.substr(0, 13) == "setterminator")
     {
         config.terminator = commandLine.substr(14);
         config.Save();
         return;
     }
-    else if (commandLine.substr(0, 15) == "sethistorysize ")
+    else if (commandLine.substr(0, 14) == "sethistorysize")
     {
         if(atoi(commandLine.substr(15).c_str()) > 0)
 	{
@@ -137,7 +137,7 @@ void ProcessCommand (string commandLine)
       	queue.PrintHistory();
         return;
     }
-    else if (commandLine.substr(0, 15) == "setnewnamesize ")
+    else if (commandLine.substr(0, 14) == "setnewnamesize")
     {
         if(atoi(commandLine.substr(15).c_str()) > 0)
 	{
@@ -167,26 +167,35 @@ void ProcessCommand (string commandLine)
             }
             else cmdArguments[noOfArguments] += commandLine[i];
         }
-	noOfArguments++;
-        
-        if (noOfArguments == 1)
-        {
-            aliasList.Clear();
-        }
-        else if (aliasList.Length() > 0)
-        {
-            unsigned int pos;
-            pos = aliasList.Find(cmdArguments[1], cmdArguments[1].length());
-            if (pos < 99999)
-            {
-                aliasList.Delete(pos);
-                aliasList.Add(commandLine.substr(11));
-            }
-            else
-            {
-                aliasList.Add(commandLine.substr(11));
-            }
-        }
+        noOfArguments++;
+         
+		if (noOfArguments == 1)
+		{
+			aliasList.Clear();
+		}
+		else
+		{
+			 unsigned int pos;
+			 pos = aliasList.Find(cmdArguments[1], cmdArguments[1].length());
+			 if (noOfArguments == 3 && cmdArguments[1] == cmdArguments[2])
+			 {
+				cout << "I can't let you do that Dave." << endl << "(You cannot have an alias be equal to itself.)" << endl;
+			 }
+			 else if (pos < 99999 && noOfArguments == 3)
+			 {
+				aliasList.Delete(pos);
+				aliasList.Add(commandLine.substr(11));
+			 }
+			 else if (pos < 99999 && noOfArguments == 2)
+			 {
+				aliasList.Delete(pos);
+			 }
+			 else
+			 {
+				aliasList.Add(commandLine.substr(11));
+			 }
+		}
+		return;
     }
     else if (commandLine.substr(0, 12) == "shownewnames")
     {
@@ -196,7 +205,7 @@ void ProcessCommand (string commandLine)
         }
         return;
     }
-    else if (commandLine.substr(0, 14) == "writenewnames ")
+    else if (commandLine.substr(0, 13) == "writenewnames")
     {
         string filename = commandLine.substr(14);
         ofstream fout;
@@ -211,7 +220,7 @@ void ProcessCommand (string commandLine)
         fout.close();
         return;
     }
-    else if (commandLine.substr(0, 13) == "readnewnames ")
+    else if (commandLine.substr(0, 12) == "readnewnames")
     {
         string filename = commandLine.substr(13);
         ifstream fin;
@@ -244,17 +253,26 @@ void ProcessCommand (string commandLine)
     else 
     {
         string alias;
-	for (int i = 0; i < commandLine.length(); i++)
+	 string args;
+		for (int i = 0; i < commandLine.length(); i++)
         {
-            if (commandLine[i]  == ' ') break;
+            if (commandLine[i]  == ' ') 
+		{
+			if(commandLine[i+1] != '\0')
+			{
+				args = commandLine.substr(i+1);
+			}
+			break;
+		}
             else alias += commandLine[i];
         }  
         unsigned int pos = aliasList.Find(alias, alias.length());
         if (pos < 99999)
         {
             string newCmd = aliasList[pos].substr(alias.length()+1);
-	    ProcessCommand(newCmd);
-	    return;
+		newCmd = newCmd + " " + args;
+			ProcessCommand(newCmd);
+			return;
         }
     }
 

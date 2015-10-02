@@ -1,0 +1,26 @@
+function     :main
+variable     :a
+a            :integer
+put          :6
+put          :5
+put          :4
+call         :notmain
+set          :a
+return       :a
+
+function     :notmain
+variable     :b
+b            :integer
+put          :argument
+set          :b
+put          :b
+put          :argument
+multiply     :
+set          :b
+put          :b
+put          :argument
+multiply     :
+set          :b
+return       :b
+
+

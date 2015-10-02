@@ -1,0 +1,18 @@
+function    :main
+variable    :a
+a           :float
+a           :10
+put         :a
+call        :notmain
+set         :a<0>
+return      :a
+
+function    :notmain
+variable    :b
+b           :address
+put         :argument
+put         :2
+multiply    :
+set         :b
+return      :b
+

@@ -1,0 +1,28 @@
+comment      :File I/O Tester
+comment      :This program copies the contents of one file to another.
+comment      :Author: Robert J. Hilderman
+comment      :Copyright 2015
+
+
+function     :main
+file         :a
+a            :input
+put          :'halprograms/crapolaIN1
+set          :a
+file         :b
+b            :output
+put          :'halprograms/crapolaOUT1
+set          :b
+open         :a
+open         :b
+label        :continue
+read         :a
+compare      :eof
+jumpequal    :end
+write        :b
+newline      :b
+jump         :continue
+label        :end
+close        :a
+close        :b
+return       :'OK

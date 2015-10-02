@@ -1,0 +1,19 @@
+function     :main
+file         :display
+open         :display
+variable     :a
+a            :integer
+put          :@a
+call         :notmain
+put          :a
+write        :display
+newline      :display
+close        :display
+return       :'OK
+
+function     :notmain
+put          :argument
+reference    :b
+put          :45
+set          :b
+return       :b
