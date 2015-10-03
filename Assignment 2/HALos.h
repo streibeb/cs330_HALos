@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <limits.h>
+#include <fcntl.h>
 
 using namespace std;
 
@@ -94,7 +95,7 @@ void ShutdownAndRestart (string command, string arguments []);
 void Cull (string command, string arguments []);
 
 void SendMessageToHAL9000 (processDescriptor process);
-void SendReturnStatusToHALshell (string pid, string returnValue, string message);
+void SendReturnStatusToHALshell (string pid, string returnValue, string message, string returnOther);
 void SendMessageToHALkeyboardDriver (string pid, string systemCall);
 void SendMessageToHALdisplayDriver (string pid, string systemCall, string buffer);
 void SendMessageToHALdiskDriver (string pid, string systemCall, string fileName, string mode,
@@ -116,6 +117,8 @@ static volatile sig_atomic_t messageFromHALdiskDriver = 0;
 static void SignalHandler (int signalNo, siginfo_t* info, void* context);
 sigset_t interruptMask;
 struct sigaction act;
+
+int GetClockTicks();
 
 inline void BlockSignals ()
 {

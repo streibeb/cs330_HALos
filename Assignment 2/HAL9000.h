@@ -13,6 +13,8 @@
 #include <unistd.h>
 #include <signal.h>
 #include <limits.h>
+#include <fcntl.h>
+#include <string>
 
 using namespace std;
 
@@ -35,6 +37,8 @@ pid_t HALstartPid;
 pid_t HALosPid;
 int returnPid;
 string returnValue = "";
+int HALclock = -1;
+string returnOther;
 
 void Initialize ();
 void InitializeMemory ();
@@ -115,6 +119,8 @@ static void SignalHandler (int signalNo, siginfo_t* info, void* context);
 sigset_t interruptMask;
 struct sigaction act;
 
+void SetClockTicks();
+
 inline void BlockSignals ()
 {
     if (sigprocmask (SIG_BLOCK, &interruptMask, NULL) == -1)
@@ -132,3 +138,4 @@ inline void UnblockSignals ()
         exit (1);
     }
 }
+

@@ -73,6 +73,38 @@ void HALos ()
     return;
 }
 
+int GetClockTicks()
+{
+    int lock;
+    struct flock key;
+    int clockTicks;
+
+	ifstream clockFile;
+	clockFile.open("HAL9000clock");
+	if(!clockFile)
+	{
+		cout << "No clock ticks retrieved; unable to open HAL9000clock.";
+		exit (1);
+	}
+
+    key.l_type = F_WRLCK;
+    key.l_whence = SEEK_SET;
+    key.l_start = 0;
+    key.l_len = 0;
+    key.l_pid = getpid ();
+    lock = open ("HAL9000clockLock", O_RDONLY);
+    fcntl (lock, F_SETLKW, &key);
+
+	clockFile >> clockTicks;
+	clockFile.close();
+
+    key.l_type = F_UNLCK;
+    fcntl (lock, F_SETLK, &key);
+    close (lock);
+
+    return clockTicks;
+}
+
 string GetMessageFromHALshell (string arguments [], string& type)
 {
     ifstream commandLineFile;
@@ -142,7 +174,7 @@ void HandleCommand (string command, string arguments [], string type)
     {
         if (type == "BACKGROUND_PROCESS")
         {
-            SendReturnStatusToHALshell (itos (nextPid), "", result);
+            SendReturnStatusToHALshell (itos (nextPid), "", result, "");
         }
         if (cpuProcess.pid.length () == 0)
         {
@@ -173,7 +205,7 @@ void HandleCommand (string command, string arguments [], string type)
     }
     else
     {
-        SendReturnStatusToHALshell (itos (nextPid), "", result);
+        SendReturnStatusToHALshell (itos (nextPid), "", result, "");
     }
     nextPid ++;
 
@@ -184,7 +216,8 @@ void HandleFinishedProcess (bool okToScheduleNextProcess)
 {
     if (cpuProcess.type == "FOREGROUND_PROCESS")
     {
-        SendReturnStatusToHALshell (parameter1, parameter2, "");
+       remove ((cpuProcess.pid + "_backingstore").c_str ());
+	SendReturnStatusToHALshell (parameter1, parameter2, parameter3, parameter4);
     }
     if (readyQueue.IsEmpty ())
     {
@@ -595,8 +628,8 @@ void HandleSystemCall (bool okToScheduleNextProcess)
     return;
 }
 
-void SendReturnStatusToHALshell (string pid, string returnValue, string message)
-{    
+void SendReturnStatusToHALshell (string pid, string returnValue, string message, string returnOther)
+{
     ofstream returnStatusFile;
     union sigval dummyValue;
    
@@ -610,6 +643,7 @@ void SendReturnStatusToHALshell (string pid, string returnValue, string message)
     returnStatusFile << pid << endl;
     returnStatusFile << returnValue << endl;
     returnStatusFile << message << endl;
+    returnStatusFile << returnOther << endl;
     returnStatusFile.close ();
 
     if (sigqueue (HALshellPid, SIGRTMIN, dummyValue) == -1)
@@ -881,6 +915,8 @@ string CreateProcessImage (int pid, string command)
     programSourceCodeFile.close ();
 
     ProcessImageToFile (pid, "backingstore");
+
+	SetKernelVariableValue("CREATION_TIME", itos (GetClockTicks()));
 
     return ("ok");
 }
@@ -1491,7 +1527,7 @@ void Cull (string command, string arguments [])
             cpuProcess.pid == arguments [0])
         {
             remove ((cpuProcess.pid + "_backingstore").c_str ());
-            SendReturnStatusToHALshell (cpuProcess.pid, "", "process culled");
+            SendReturnStatusToHALshell (cpuProcess.pid, "", "process culled", "");
             if (readyQueue.IsEmpty ())
             {
                 cpuProcess = nullProcess;
@@ -1563,7 +1599,7 @@ void Cull (string command, string arguments [])
             if (processFound)
             {
                 remove ((arguments [0] + "_backingstore").c_str ());
-                SendReturnStatusToHALshell (arguments [0], "", "process culled");
+                SendReturnStatusToHALshell (arguments [0], "", "process culled", "");
             }
             else
             {
@@ -1585,7 +1621,7 @@ void Cull (string command, string arguments [])
                 if (processFound)
                 {
                     remove ((arguments [0] + "_backingstore").c_str ());
-                    SendReturnStatusToHALshell (arguments [0], "", "process culled");
+                    SendReturnStatusToHALshell (arguments [0], "", "process culled", "");
                 }
                 else
                 {
@@ -1607,7 +1643,7 @@ void Cull (string command, string arguments [])
                     if (processFound)
                     {
                         remove ((arguments [0] + "_backingstore").c_str ());
-                        SendReturnStatusToHALshell (arguments [0], "", "process culled");
+                        SendReturnStatusToHALshell (arguments [0], "", "process culled", "");
                     }
                     else
                     {
@@ -1629,12 +1665,12 @@ void Cull (string command, string arguments [])
                         if (processFound)
                         {
                             remove ((arguments [0] + "_backingstore").c_str ());
-                            SendReturnStatusToHALshell (arguments [0], "", "process culled");
+                            SendReturnStatusToHALshell (arguments [0], "", "process culled", "");
                         }
                         else
                         {
                             // Or it may not exist.
-                            SendReturnStatusToHALshell (arguments [0], "", "process not found");
+                            SendReturnStatusToHALshell (arguments [0], "", "process not found", "");
                         }
                     }
                 }
@@ -1702,7 +1738,7 @@ void Cull (string command, string arguments [])
         if (keyboardProcess.pid.length () > 0)
         {
             remove ((keyboardProcess.pid + "_backingstore").c_str ());
-            SendReturnStatusToHALshell (keyboardProcess.pid, "", "process culled");
+            SendReturnStatusToHALshell (keyboardProcess.pid, "", "process culled", "");
             if (keyboardQueue.IsEmpty ())
             {
                 keyboardProcess = nullProcess;
@@ -1734,7 +1770,7 @@ void Cull (string command, string arguments [])
                  cpuProcess.type == "FOREGROUND_PROCESS")
         {
             remove ((cpuProcess.pid + "_backingstore").c_str ());
-            SendReturnStatusToHALshell (cpuProcess.pid, "", "process culled");
+            SendReturnStatusToHALshell (cpuProcess.pid, "", "process culled", "");
             // There is no process ready to run.
             if (readyQueue.IsEmpty ())
             {
@@ -1773,7 +1809,7 @@ void Cull (string command, string arguments [])
             if (processFound)
             {
                 remove ((arguments [0] + "_backingstore").c_str ());
-                SendReturnStatusToHALshell (arguments [0], "", "process culled");
+                SendReturnStatusToHALshell (arguments [0], "", "process culled", "");
             }
             else
             {
@@ -1796,7 +1832,7 @@ void Cull (string command, string arguments [])
                 if (processFound)
                 {
                     remove ((arguments [0] + "_backingstore").c_str ());
-                    SendReturnStatusToHALshell (arguments [0], "", "process culled");
+                    SendReturnStatusToHALshell (arguments [0], "", "process culled", "");
                 }
                 else
                 {
@@ -1819,7 +1855,7 @@ void Cull (string command, string arguments [])
                     if (processFound)
                     {
                         remove ((arguments [0] + "_backingstore").c_str ());
-                        SendReturnStatusToHALshell (arguments [0], "", "process culled");
+                        SendReturnStatusToHALshell (arguments [0], "", "process culled", "");
                     }
                     else
                     {
@@ -1842,12 +1878,12 @@ void Cull (string command, string arguments [])
                         if (processFound)
                         {
                             remove ((arguments [0] + "_backingstore").c_str ());
-                            SendReturnStatusToHALshell (arguments [0], "", "process culled");
+                            SendReturnStatusToHALshell (arguments [0], "", "process culled", "");
                         }
                         else
                         {
                             // Or it may not exist.
-                            SendReturnStatusToHALshell (arguments [0], "", "process not found");
+                            SendReturnStatusToHALshell (arguments [0], "", "process not found", "");
                         }
                     }
                 }

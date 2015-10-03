@@ -24,6 +24,7 @@ pid_t HALosPid;
 string returnPid = "";
 string returnValue = "";
 string returnMessage = "";
+string returnOther = "";
 
 void Initialize ();
 void HALshell ();
