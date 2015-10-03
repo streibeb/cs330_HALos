@@ -172,6 +172,7 @@ void HandleCommand (string command, string arguments [], string type)
     result = CreateProcessImage (nextPid, command);
     if (result == "ok")
     {
+        cout << "Created successfully" << endl;
         if (type == "BACKGROUND_PROCESS")
         {
             SendReturnStatusToHALshell (itos (nextPid), "", result, "");
@@ -195,10 +196,12 @@ void HandleCommand (string command, string arguments [], string type)
             process.type = type;
             process.status = "NEW_PROCESS";
             process.command = command;
+            process.queueNo = 0;
             for (i = 0; i < MAX_COMMAND_LINE_ARGUMENTS; i ++)
             {
                 process.arguments [i] = arguments [i];
             }
+            cout << process.pid << " in queue " << process.queueNo << endl;
             process.returnValue = "";
             readyQueue.Enqueue (process);
         }
@@ -916,7 +919,7 @@ string CreateProcessImage (int pid, string command)
 
     ProcessImageToFile (pid, "backingstore");
 
-	SetKernelVariableValue("CREATION_TIME", itos (GetClockTicks()));
+    SetKernelVariableValue("CREATION_TIME", itos (GetClockTicks()));
 
     return ("ok");
 }
@@ -1578,10 +1581,10 @@ void Cull (string command, string arguments [])
         {
             // Otherwise, find and remove the process with pid == arguments [0].
             // It could be in the ready queue. If found there, cull it.
+            queueLength = 0;
             for (int j = 0; j < NO_OF_READY_QUEUES; j++)
             {
-                queueLength = readyQueue.Length(j);
-                if (queueLength != 0) break;
+                queueLength += readyQueue.Length(j);
             }
             processFound = false;
             for (i = 0; i < queueLength; i ++)
@@ -1787,10 +1790,10 @@ void Cull (string command, string arguments [])
         {
             // Otherwise, find and remove the foreground process.
             // It could be in the ready queue. If found there, cull it.
+            queueLength = 0;
             for (int j = 0; j < NO_OF_READY_QUEUES; j++)
             {
-                queueLength = readyQueue.Length (j);
-                if (queueLength != 0) break;
+                queueLength += readyQueue.Length (j);
             }
             processFound = false;
             for (i = 0; i < queueLength; i ++)
