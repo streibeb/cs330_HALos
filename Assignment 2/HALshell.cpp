@@ -60,9 +60,11 @@ void ProcessCommand (string commandLine)
             cout << "PID = " << returnPid << endl;
             cout << "RETURN_VALUE = " << returnValue << endl;
             cout << "MESSAGE = " << returnMessage << endl;
-            returnPid = "";
+            cout << returnOther << endl;
+	     returnPid = "";
             returnValue = "";
             returnMessage = "";
+            returnOther = "";
         }
         return;
     }
@@ -171,6 +173,7 @@ void GetMessageFromHALos ()
     getline (halOsMessageFile, returnPid);
     getline (halOsMessageFile, returnValue);
     getline (halOsMessageFile, returnMessage);
+    getline (halOsMessageFile, returnOther);
 
     if (!halOsMessageFile)
     {

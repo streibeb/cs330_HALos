@@ -91,9 +91,10 @@ void HAL9000 ()
             {
                 returnPid = GetKernelVariableIntegerValue ("PID");
                 returnValue = GetKernelVariableStringValue ("RETURN_VALUE");
+                returnOther = "CREATION_TIME: " + GetKernelVariableStringValue("CREATION_TIME") + " RUNNING_TIME: " + GetKernelVariableStringValue("RUNNING_TIME") + " END_TIME: " + GetKernelVariableStringValue("END_TIME");
+                SendMessageToHALos ("PROCESS_DONE", itos (returnPid), returnValue, "", returnOther,"");	
+                ProcessImageToFile (GetKernelVariableIntegerValue("PID"), "backingstore");
                 DeleteProcessImage (GetMemorySegmentBoundary ("PROGRAM_TEXT_START_ADDRESS", segmentSize));
-                remove ((itos (returnPid) + "_backingstore").c_str ());
-                SendMessageToHALos ("PROCESS_DONE", itos (returnPid), returnValue, "", "", "");
                 returnPid = -1;
                 returnValue = "";
             }
@@ -101,6 +102,39 @@ void HAL9000 ()
     } while (1);
 
     return;
+}
+
+void SetClockTicks()
+{
+    int lock;
+    struct flock key;
+
+        ofstream clockFile;
+        clockFile.open("HAL9000clock");
+        if(!clockFile)
+        {
+                cout << "No clock ticks stored; unable to open HAL9000clock.";
+                CoreDump ();
+                exit (1);
+        }
+        HALclock += 1;
+
+    key.l_type = F_WRLCK;
+    key.l_whence = SEEK_SET;
+    key.l_start = 0;
+    key.l_len = 0;
+    key.l_pid = getpid ();
+    lock = open ("HAL9000clockLock", O_RDONLY);
+    fcntl (lock, F_SETLKW, &key);
+
+        clockFile << HALclock;
+        clockFile.close();
+
+    key.l_type = F_UNLCK;
+    fcntl (lock, F_SETLK, &key);
+    close (lock);
+
+        return;
 }
 
 string GetMessageFromHALos (int& pid, string& command, string arguments [], string& buffer, string& result)
@@ -208,6 +242,14 @@ bool ExecuteOneInstruction (string address, string buffer, string result)
     bool executableInstruction;
     int segmentSize;
     bool systemCall;
+	
+	SetClockTicks();
+
+	int runTime = 0;
+	runTime = GetKernelVariableIntegerValue("RUNNING_TIME");
+	runTime += 1;
+	SetKernelVariableValue("RUNNING_TIME", itos(runTime));
+	
 
     string restartInstructionStatusFlag;
 
@@ -248,8 +290,9 @@ bool ExecuteOneInstruction (string address, string buffer, string result)
         }       
     }
     else
-    {
-        EndMain ();
+    {        
+
+	EndMain ();
     }
 
     if (GetKernelVariableStringValue ("RETURN_STATUS_FLAG") == "true")
@@ -422,6 +465,11 @@ bool ExecuteInstruction (int currentProgramTextAddress, memoryCell contents,
 
 void EndMain ()
 {
+	int runTime = GetKernelVariableIntegerValue("RUNNING_TIME");
+	int createTime = GetKernelVariableIntegerValue("CREATION_TIME");
+	int endTime = runTime-createTime;
+	SetKernelVariableValue("END_TIME", itos (endTime));
+
     memoryCell contents;
 
     ram.SetP (GetKernelVariableIntegerValue ("TOP_FUNCTION_CALL_VALUES_STACK_ADDRESS"));
@@ -1975,8 +2023,14 @@ void DeleteProcessImage (int startAddress)
     SetKernelVariableValue ("NEXT_ARGUMENT_ADDRESS", "null");
     SetKernelVariableValue ("QUANTUM_TIME_REMAINING", itos (QUANTUM_LENGTH));
     SetKernelVariableValue ("RESTART_INSTRUCTION_STATUS_FLAG", "false");
+	SetKernelVariableValue("CREATION_TIME", itos(0));
+	SetKernelVariableValue("RUNNING_TIME", itos(0));
+	SetKernelVariableValue("END_TIME", itos(0));
     SetTableAndStackStartAddresses ();
     ram.Clear (startAddress);
+
+
+
 
     return;
 }
@@ -2659,6 +2713,8 @@ void Initialize ()
         CoreDump ();
         exit (1);
     }
+
+	SetClockTicks();
 
     return;
 }
