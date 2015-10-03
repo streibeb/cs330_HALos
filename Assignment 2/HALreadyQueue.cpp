@@ -4,6 +4,8 @@
 // Copyright (c) 2015 Robert J. Hilderman.
 // All rights reserved.
 //
+#include <iostream>
+using namespace std;
 
 #include "HALreadyQueue.h"
 
@@ -79,6 +81,7 @@ processDescriptor ReadyQueueType::SetQueueNo(processDescriptor process)
         if (process.contextSwitches == 0 && process.direction == "DOWN")
         {
             int i = ++process.queueNo;
+            cout << "Process " << process.pid << " moved " << process.direction << " to queue " << process.queueNo << endl;
             if (i == NO_OF_READY_QUEUES - 1)
             {
                 process.direction = "UP";
@@ -94,6 +97,7 @@ processDescriptor ReadyQueueType::SetQueueNo(processDescriptor process)
         else if (process.contextSwitches == 0 && process.direction == "UP")
         {
             int i = --process.queueNo;
+            cout << "Process " << process.pid << " moved " << process.direction << " to queue " << process.queueNo << endl;
             if (i == 0)
             {
                 process.direction = "DOWN";
@@ -133,6 +137,7 @@ void ReadyQueueType::Enqueue (processDescriptor process)
         }
         queues[i].queue[j / 2] = process;
     }
+    cout << "Enqueued pid: " << process.pid << endl;
     return;
 }
 
@@ -170,5 +175,6 @@ processDescriptor ReadyQueueType::Dequeue ()
             }
         }
     }
+    cout << "Dequeued pid: " << toReturn.pid << endl;
     return toReturn;
 }
