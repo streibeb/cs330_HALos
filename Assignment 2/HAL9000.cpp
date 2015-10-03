@@ -465,10 +465,7 @@ bool ExecuteInstruction (int currentProgramTextAddress, memoryCell contents,
 
 void EndMain ()
 {
-	int runTime = GetKernelVariableIntegerValue("RUNNING_TIME");
-	int createTime = GetKernelVariableIntegerValue("CREATION_TIME");
-	int endTime = runTime-createTime;
-	SetKernelVariableValue("END_TIME", itos (endTime));
+	SetKernelVariableValue("END_TIME", itos (HALclock));
 
     memoryCell contents;
 

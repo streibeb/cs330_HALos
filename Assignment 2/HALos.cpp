@@ -917,9 +917,10 @@ string CreateProcessImage (int pid, string command)
 
     programSourceCodeFile.close ();
 
+	SetKernelVariableValue("CREATION_TIME", itos (GetClockTicks()));
+
     ProcessImageToFile (pid, "backingstore");
 
-    SetKernelVariableValue("CREATION_TIME", itos (GetClockTicks()));
 
     return ("ok");
 }
