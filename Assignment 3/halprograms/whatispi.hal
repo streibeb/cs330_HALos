@@ -1,0 +1,16 @@
+constant     :crap
+crap         :integer
+
+function     :main
+put          :5
+set          :crap
+put          :10
+set          :crap
+variable     :pi
+pi           :float
+put          :22.0
+put          :7.003015
+divide       :
+set          :pi
+coresnapshot :
+return       :pi

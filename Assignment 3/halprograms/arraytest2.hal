@@ -1,0 +1,14 @@
+function       :main
+variable       :a
+a              :integer
+a              :10
+variable       :i
+i              :integer
+put            :3
+set            :i
+memorysnapshot :
+put            :27
+memorysnapshot :
+set            :@a<i>
+memorysnapshot :
+return         :OK

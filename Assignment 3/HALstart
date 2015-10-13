@@ -1,0 +1,21 @@
+#! /usr/bin/tcsh -f
+
+#
+# HALstart
+#
+# Copyright (c) 2015 Robert J. Hilderman.
+# All rights reserved.
+#
+
+echo
+echo "HALstart: powering up HAL9000 ..."
+HALzap
+rm *template >& /dev/null
+rm *backingstore >& /dev/null
+rm *coresnapshot* >& /dev/null
+rm *To* >& /dev/null
+rm *coredump >& /dev/null
+rm core.* >& /dev/null
+sleep 0.1
+HAL9000
+exit 0

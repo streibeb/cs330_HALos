@@ -1,0 +1,17 @@
+function     :main
+variable     :i
+i            :integer
+put          :0
+set          :i
+label        :start
+put          :i
+put          :1
+add          :
+set          :i
+put          :i
+put          :900
+compare      :
+jumpequal    :end
+jump         :start
+label        :end
+return       :

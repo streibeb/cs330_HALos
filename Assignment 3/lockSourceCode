@@ -1,0 +1,56 @@
+#include <fcntl.h>
+
+// THIS FILE CONTAINS THE CODE FOR A LOCK MECHANISM
+// THAT ENSURES THE HALOS AND THE HAL9000 HAVE
+// EXCLUSIVE USE OF THE HAL9000CLOCK FILE.
+
+// THE FOLLOWING PROCEDURE WILL GO IN HALOS.CPP
+
+int GetClockTicks ()
+{
+    int lock;
+    struct flock key;
+    int clockTicks;
+
+    // YOUR CLOCK FILE VARIABLE DECLARATIONS GO HERE!
+
+    key.l_type = F_WRLCK;
+    key.l_whence = SEEK_SET;
+    key.l_start = 0;
+    key.l_len = 0;
+    key.l_pid = getpid ();
+    lock = open ("HAL9000clockLock", O_WRONLY);
+    fcntl (lock, F_SETLKW, &key);
+
+    // YOUR CLOCK FILE READ GOES HERE!
+
+    key.l_type = F_UNLCK;
+    fcntl (lock, F_SETLK, &key);
+    close (lock);
+
+    return clockTicks;
+}
+
+// THE FOLLOWING PROCEDURE WILL GO IN HAL9000.CPP
+
+void SetClockTicks ()
+{
+    int lock;
+    struct flock key;
+
+    // YOUR CLOCK FILE VARIABLE DECLARATIONS GO HERE!
+
+    key.l_type = F_WRLCK;
+    key.l_whence = SEEK_SET;
+    key.l_start = 0;
+    key.l_len = 0;
+    key.l_pid = getpid ();
+    lock = open ("HAL9000clockLock", O_WRONLY);
+    fcntl (lock, F_SETLKW, &key);
+
+    // YOUR CLOCK FILE WRITE GOES HERE!
+
+    key.l_type = F_UNLCK;
+    fcntl (lock, F_SETLK, &key);
+    close (lock);
+}

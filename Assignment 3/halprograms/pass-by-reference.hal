@@ -1,0 +1,21 @@
+function :main
+variable  :a
+a         :integer
+put       :10
+put       :20
+put       :@a
+call      :sum
+unput     :
+unput     :
+unput     :
+return    :a
+
+function  :sum
+put       :argument
+reference :b
+put       :argument
+put       :argument
+add       :
+set       :b
+return    :
+

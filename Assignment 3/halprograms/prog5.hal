@@ -1,0 +1,86 @@
+function .calculate2
+put      .5
+put      .2
+add      .
+call     .calculate3
+put      .2
+add      .
+return   .0
+
+function .calculate3
+put      .5
+put      .2
+subtract  .
+call     .calculate4
+put      .2
+multiply  .
+return   .-1
+
+function .calculate4
+put      .5
+put      .2
+divide   .
+call     .calculate5
+put      .2
+add      .
+return   .98
+
+function .calculate8
+put      .5
+put      .2
+add      .
+call     .calculate9
+put      .2
+add      .
+return   .-15
+
+function .calculate5
+put      .5
+put      .2
+add      .
+call     .calculate6
+put      .2
+add      .
+return   .1
+
+function .main
+put      .5
+put      .2
+add      .
+call     .calculate1
+put      .2
+add      .
+return   .21
+
+function .calculate6
+put      .5
+put      .2
+add      .
+call     .calculate7
+put      .2
+add      .
+return   .-999
+
+function .calculate7
+put      .5
+put      .2
+add      .
+call     .calculate8
+put      .2
+add      .
+return   .567
+
+function .calculate9
+put      .5
+put      .2
+add      .
+return   .-18.6
+
+function .calculate1
+put      .5
+put      .2
+add      .
+call     .calculate2
+put      .2
+add      .
+return   .6.75

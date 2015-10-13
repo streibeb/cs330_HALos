@@ -1,0 +1,93 @@
+comment        :Iterative Binary Search
+comment        :Author: Robert J. Hilderman
+comment        :Copyright 2015
+
+
+comment        :This program finds an integer value in a
+comment        :sorted array using binary search.
+
+function       :main
+comment        :Initialize array a
+variable       :a
+a              :integer
+a              :16
+put            :1
+set            :a<0>
+put            :2
+set            :a<1>
+put            :3
+set            :a<2>
+put            :4
+set            :a<3>
+put            :5
+set            :a<4>
+put            :6
+set            :a<5>
+put            :7
+set            :a<6>
+put            :8
+set            :a<7>
+put            :9
+set            :a<8>
+put            :10
+set            :a<9>
+put            :11
+set            :a<10>
+put            :12
+set            :a<11>
+put            :13
+set            :a<12>
+put            :14
+set            :a<13>
+put            :15
+set            :a<14>
+put            :16
+set            :a<15>
+comment        :Searching for x
+variable       :x
+x              :integer
+put            :10
+set            :x
+variable       :p
+p              :integer
+put            :0
+set            :p
+variable       :q
+q              :integer
+put            :0
+set            :q
+variable       :r
+r              :integer
+put            :15
+set            :r
+label          :search
+put            :q
+put            :r
+compare        :
+jumpgreater    :stop
+put            :q
+put            :r
+add            :
+put            :2
+divide         :
+set            :p
+put            :x
+put            :a<p>
+compare        :
+jumpless       :xless
+jumpgreater    :xgreater
+return         :p
+label          :xless
+put            :p
+put            :1
+subtract       :
+set            :r
+jump           :search
+label          :xgreater
+put            :p
+put            :1
+add            :
+set            :q
+jump           :search
+label          :stop
+return         :-1

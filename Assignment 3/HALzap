@@ -1,0 +1,31 @@
+#! /usr/bin/tcsh -f
+
+#
+# HALzap
+#
+# Copyright (c) 2015 Robert J. Hilderman.
+# All rights reserved.
+#
+
+set ps_output = "`ps -u $user`"
+@ i = 2
+
+set ps_test
+while ( $i <= $#ps_output )
+    set line = ( $ps_output[$i] )
+    if ( $line[4] != "ps" && $line[4] != "tcsh" && $line[4] != "zap" ) then
+        set ps_test = ( $ps_test $i )
+    endif
+    @ i ++
+end    
+
+foreach i ( $ps_test )
+    set line = ( $ps_output[$i] )
+    set process_no = $line[1]
+    if ( $line[4] == "HAL9000" || $line[4] == "HALos" || $line[4] == "HALshell" || $line[4] == "HALkeyboardDriv" || $line[4] == "HALdisplayDrive" || $line[4] == "HALdiskDriver" ) then
+        kill -9 $process_no
+    endif
+end
+
+exit 0
+

@@ -1,0 +1,19 @@
+constant     :a
+a            :integer
+
+function     :main
+put          :100
+set          :a
+put          :-100
+set          :a
+variable     :i
+i            :string
+i            :10
+variable     :j
+j            :integer
+put          :4
+set          :j
+put          :Feelings! Nothing more than feelings!
+set          :i<j>
+coresnapshot :
+return       :Oakey doakey!
