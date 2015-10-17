@@ -66,6 +66,16 @@ void MemoryType::SetP (int q)
     return;
 }
 
+void MemoryType::Move (int toFrame, int fromFrame)
+{
+//    for (p = 0; p < PAGE_SIZE; p ++)
+//    {
+//        memory [p + (toFrame * PAGE_SIZE)] = memory [p + (fromFrame * PAGE_SIZE)];
+//    }
+
+    return;
+}
+
 memoryCell MemoryType::Read ()
 {
     memoryCell contents;

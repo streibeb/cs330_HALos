@@ -32,6 +32,7 @@ public:
     bool IsPSet ();
     int GetP ();
     void SetP (int q);
+    void Move (int toFrame, int fromFrame);
     memoryCell Read ();
     void Write (string symbol, string value);
     void ReWrite (string symbol, string value);
