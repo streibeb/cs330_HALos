@@ -1,3 +1,4 @@
+
 //
 // HAL9000.cpp
 //
@@ -35,7 +36,36 @@ void HAL9000 ()
         if (GetKernelVariableIntegerValue ("QUANTUM_TIME_REMAINING") == 0)
         {
             SetKernelVariableValue ("QUANTUM_TIME_REMAINING", itos (QUANTUM_LENGTH));
-            ProcessImageToFile (runningPid, "backingstore");
+            // Find current process in page table
+            if (pageTable.Find(itos(runningPid))) 
+            {
+                int p = pageTable.GetP();
+                pageTable.SetAge(p, 0);
+                ram.Move(p, 0);
+                printf("%i MOVED TO PAGE %i FROM 0\n", runningPid, p);
+            }
+            // Find first unoccupied entry
+            else if (pageTable.Find("")) 
+            {
+                int p = pageTable.GetP();
+                pageTable.Insert(itos(runningPid));
+                pageTable.SetAge(p, 0);
+                ram.Move(p, 0);
+                printf("%i MOVED TO EMPTY PAGE %i FROM 0\n", runningPid, p);
+            }
+            else
+            {
+                string oldPid = pageTable.FindOldest();                
+                pageTable.Find(oldPid);
+                int p = pageTable.GetP();
+                ram.Move(1, p);
+                pageTable.Insert(itos(runningPid));
+                pageTable.SetAge(p, 0);
+                ram.Move(p, 0);
+                ram.Move(0, 1);
+                ProcessImageToFile (atoi(oldPid.c_str()), "backingstore"); 
+                printf("%s MOVED TO BACKING STORE\n", oldPid);
+            }
             DeleteProcessImage (GetMemorySegmentBoundary ("PROGRAM_TEXT_START_ADDRESS", segmentSize));
             SendMessageToHALos ("INTERRUPT", "QUANTUM_EXPIRED", itos (runningPid), "", "", "");
         }
@@ -44,8 +74,28 @@ void HAL9000 ()
         {
             somethingToExecute = 0;
             messageType = GetMessageFromHALos (pid, command, arguments, buffer, result);
+cout << pid << ": " << messageType << endl;
+//for (pageTable.SetP(0); pageTable.GetP() < pageTable.Size(); pageTable.Iterate())
+//{
+//    pageDescriptor p = pageTable.Read();
+//    printf("%i \tpid:%s \tage:%i\n", pageTable.GetP(), p.pid.c_str(), p.age);
+//}
             if (messageType == "PAUSE_ANY_EXECUTING_PROCESS")
             {
+                if (pageTable.Find(itos(runningPid)))
+                {
+                    pageTable.Delete();
+                    ProcessImageToFile (runningPid, "backingstore");
+                    DeleteProcessImage (GetMemorySegmentBoundary ("PROGRAM_TEXT_START_ADDRESS", segmentSize));
+                }
+                for (pageTable.SetP(2); pageTable.GetP() < pageTable.Size(); pageTable.Iterate())
+                {
+                    if (pageTable.Read().pid == "") continue;
+                    pageTable.Delete();
+                    ram.Move(0, pageTable.GetP());
+                    ProcessImageToFile (runningPid, "backingstore");
+                    DeleteProcessImage (GetMemorySegmentBoundary ("PROGRAM_TEXT_START_ADDRESS", segmentSize));
+                }
                 address = GetKernelVariableStringValue ("INSTRUCTION_POINTER");
                 if (address != "null")
                 {
@@ -63,7 +113,23 @@ void HAL9000 ()
             else if (messageType == "CONTINUE_EXECUTING_PROCESS")
             {
                 runningPid = pid;
-                ProcessImageToMemory (runningPid);
+                // Process found in page table
+                if (pageTable.Find(itos(runningPid)))
+                {
+                    int p = pageTable.GetP();
+                    pageTable.SetAge(0, p);
+                    ram.Move(0, p);
+                    printf("%i MOVED TO PAGE 0 FROM %i\n", runningPid, p);
+                }
+                // Process not found in page table
+                else
+                {
+                    printf("%i LOADED FROM BACKING STORE\n", runningPid);
+                    pageTable.SetP(0);
+                    pageTable.Insert(itos(runningPid));
+                    ProcessImageToMemory (runningPid);
+                    printf("%i MOVED TO PAGE 0\n", runningPid);
+                }
             }
             else if (messageType == "NEW_PROCESS")
             {
@@ -76,7 +142,10 @@ void HAL9000 ()
                 }
                 else
                 {
+                    pageTable.SetP(0);
+                    pageTable.Insert(itos(runningPid));
                     ProcessImageToMemory (runningPid);
+                    printf("%i INSERTED INTO PAGE 0\n", runningPid);
                     StartMain (arguments);
                 }
             }
@@ -87,10 +156,17 @@ void HAL9000 ()
         if (address != "null")
         {
             userProcessDone = ExecuteOneInstruction (address, buffer, result);
+//printf("%i EXECUTING\n", runningPid);
+            pageTable.IncrementAges();
             if (userProcessDone)
             {
                 returnPid = GetKernelVariableIntegerValue ("PID");
                 returnValue = GetKernelVariableStringValue ("RETURN_VALUE");
+                if (pageTable.Find(itos(returnPid)))
+                {
+                    pageTable.Delete();
+                }
+printf("DONE\n");
                 DeleteProcessImage (GetMemorySegmentBoundary ("PROGRAM_TEXT_START_ADDRESS", segmentSize));
                 remove ((itos (returnPid) + "_backingstore").c_str ());
                 SendMessageToHALos ("PROCESS_DONE", itos (returnPid), returnValue, "", "", "");
@@ -2112,7 +2188,7 @@ void ProcessImageToFile (int pid, string location)
     functionCallStackEndAddress = GetMemorySegmentBoundary ("FUNCTION_CALL_STACK_START_ADDRESS", segmentSize) + 1;
     functionCallStackStartAddress = functionCallStackEndAddress - segmentSize;
 
-    for (i = 0; i < MEMORY_SIZE; i ++)
+    for (i = 0; i < PAGE_SIZE; i ++)
     {
         ram.SetP (i);
         contents = ram.Read ();
@@ -2734,7 +2810,7 @@ void SetMemorySegmentBoundaries ()
         ram.IterateUp ();
     }
 
-    address = MEMORY_SIZE;
+    address = PAGE_SIZE;
 
     ram.IterateUp ();
     for (i = 1; i <= 2; i ++)

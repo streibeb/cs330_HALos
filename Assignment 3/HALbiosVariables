@@ -1,3 +1,4 @@
-MEMORY_SIZE           :4096
+PAGE_SIZE             :4096
+NO_OF_PAGES           :3
 QUANTUM_LENGTH        :10
 OPERATING_SYSTEM_NAME :HALos

@@ -14,7 +14,8 @@ using namespace std;
 
 const int MAX_BIOS_VARIABLES = 10;
 
-int MEMORY_SIZE;
+int PAGE_SIZE;
+int NO_OF_PAGES;
 int QUANTUM_LENGTH;
 string HALos;
 
@@ -54,23 +55,30 @@ int GetHALbiosVariables ()
     biosFile >> variableDescription;
     biosFile.ignore (256, ':');
     getline (biosFile, variableValue);
-    MEMORY_SIZE = atoi (variableValue.c_str ());
+    PAGE_SIZE = atoi (variableValue.c_str ());
     biosVariables [0].symbol = variableDescription;
     biosVariables [0].value = variableValue;
 
-    biosFile >> variableDescription;
+    biosFile >> variableDescription; 
     biosFile.ignore (256, ':');
     getline (biosFile, variableValue);
-    QUANTUM_LENGTH = atoi (variableValue.c_str ());
+    NO_OF_PAGES = atoi (variableValue.c_str ());
     biosVariables [1].symbol = variableDescription;
     biosVariables [1].value = variableValue;
 
     biosFile >> variableDescription;
     biosFile.ignore (256, ':');
     getline (biosFile, variableValue);
-    HALos = variableValue;
+    QUANTUM_LENGTH = atoi (variableValue.c_str ());
     biosVariables [2].symbol = variableDescription;
     biosVariables [2].value = variableValue;
+
+    biosFile >> variableDescription;
+    biosFile.ignore (256, ':');
+    getline (biosFile, variableValue);
+    HALos = variableValue;
+    biosVariables [3].symbol = variableDescription;
+    biosVariables [3].value = variableValue;
 
     biosFile.close ();
     usleep (SLEEP_DELAY);

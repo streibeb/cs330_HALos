@@ -24,7 +24,7 @@ struct memoryCell
 class MemoryType
 {
 public:
-    MemoryType (int memorySize);
+    MemoryType (int pageSize, int noOfPages);
     ~MemoryType ();
     void ResetP ();
     void IterateUp ();
@@ -43,5 +43,6 @@ public:
 private:
     memoryCell* memory;
     int p;
-    int MEMORY_SIZE;
+    int PAGE_SIZE;
+    int NO_OF_PAGES;
 };

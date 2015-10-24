@@ -957,7 +957,7 @@ void ProcessImageToFile (int pid, string location)
     functionCallStackEndAddress = GetMemorySegmentBoundary ("FUNCTION_CALL_STACK_START_ADDRESS", segmentSize) + 1;
     functionCallStackStartAddress = functionCallStackEndAddress - segmentSize;
 
-    for (i = 0; i < MEMORY_SIZE; i ++)
+    for (i = 0; i < PAGE_SIZE; i ++)
     {
         ram.SetP (i);
         contents = ram.Read ();

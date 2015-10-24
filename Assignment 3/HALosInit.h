@@ -15,7 +15,7 @@ using namespace std;
 int READY_QUEUE_SIZE;
 int FILE_TABLE_SIZE;
 int IO_QUEUE_SIZE;
-int MEMORY_SIZE;
+int PAGE_SIZE;
 
 int GetHALosVariables ()
 {
@@ -54,7 +54,7 @@ int GetHALbiosMemorySizeVariable ()
 {
     ifstream biosFile;
     string uselessString;
-    string memorySize;
+    string pageSize;
 
     biosFile.open ("HALbiosVariables");
     if (!biosFile)
@@ -65,8 +65,8 @@ int GetHALbiosMemorySizeVariable ()
 
     biosFile >> uselessString;
     biosFile.ignore (256, ':');
-    getline (biosFile, memorySize);
-    MEMORY_SIZE = atoi (memorySize.c_str ());
+    getline (biosFile, pageSize);
+    PAGE_SIZE = atoi (pageSize.c_str ());
 
     return 0;
 }

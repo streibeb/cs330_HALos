@@ -36,7 +36,7 @@ QueueType readyQueue (READY_QUEUE_SIZE);
 QueueType displayQueue (IO_QUEUE_SIZE);
 QueueType keyboardQueue (IO_QUEUE_SIZE);
 QueueType diskQueue (IO_QUEUE_SIZE);
-MemoryType ram (MEMORY_SIZE);
+MemoryType ram (PAGE_SIZE, 1);
 
 extern char **environ;
 

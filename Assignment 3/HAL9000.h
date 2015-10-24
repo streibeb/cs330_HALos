@@ -24,11 +24,16 @@ using namespace std;
     #include "HALmemory.h"
 #endif
 
+#ifndef HAL_PAGE_TABLE_H
+    #include "HALpageTable.h"
+#endif
+
 #ifndef HAL_9000_INIT_H
     #include "HAL9000Init.h"
 #endif
 
-MemoryType ram (MEMORY_SIZE);
+MemoryType ram (PAGE_SIZE, NO_OF_PAGES);
+PageTableType pageTable (NO_OF_PAGES);
 
 extern char **environ;
 pid_t HALstartPid;

@@ -4,7 +4,8 @@
 // Copyright (c) 2015 Robert J. Hilderman.
 // All rights reserved.
 //
-
+#include <stdio.h>
+using namespace std;
 #include "HALpageTable.h"
 
 PageTableType::PageTableType (int pageTableSize)

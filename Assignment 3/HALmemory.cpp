@@ -7,12 +7,13 @@
 
 #include "HALmemory.h"
 
-MemoryType::MemoryType (int memorySize)
+MemoryType::MemoryType (int pageSize, int noOfPages)
 {
-    MEMORY_SIZE = memorySize;
-    memory = new memoryCell [MEMORY_SIZE];
+    PAGE_SIZE = pageSize;
+    NO_OF_PAGES = noOfPages;
+    memory = new memoryCell [PAGE_SIZE * NO_OF_PAGES];
 
-    for (p = 0; p < MEMORY_SIZE; p ++)
+    for (p = 0; p < PAGE_SIZE * NO_OF_PAGES; p ++)
     {
         memory [p].symbol = "";
         memory [p].value = "";
@@ -46,7 +47,7 @@ void MemoryType::IterateDown ()
 
 bool MemoryType::IsPSet ()
 {
-    if (p < 0 || p > MEMORY_SIZE - 1)
+    if (p < 0 || p > PAGE_SIZE - 1)
     {
         return false;
     }
@@ -68,10 +69,10 @@ void MemoryType::SetP (int q)
 
 void MemoryType::Move (int toFrame, int fromFrame)
 {
-//    for (p = 0; p < PAGE_SIZE; p ++)
-//    {
-//        memory [p + (toFrame * PAGE_SIZE)] = memory [p + (fromFrame * PAGE_SIZE)];
-//    }
+    for (p = 0; p < PAGE_SIZE; p ++)
+    {
+        memory [p + (toFrame * PAGE_SIZE)] = memory [p + (fromFrame * PAGE_SIZE)];
+    }
 
     return;
 }
@@ -157,7 +158,7 @@ bool MemoryType::Find (string symbol, int startAddress, int endAddress)
 
 void MemoryType::Clear (int startAddress)
 {
-    for (p = startAddress; p < MEMORY_SIZE; p ++)
+    for (p = startAddress; p < PAGE_SIZE; p ++)
     {
         memory [p].symbol = "";
         memory [p].value = "";
